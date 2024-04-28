@@ -1,48 +1,54 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { NavLink, Outlet, Route, Router, Routes } from "react-router-dom";
+import { Suspense, lazy, useContext } from "react";
+import { Outlet, Route, Routes } from "react-router-dom";
+
+import { Container } from "@mui/material";
+
+import { RootContext } from "./main";
+
+import { Loader } from "./components/Loader/Loader";
+import { HeaderBar } from "./components/AppBar/AppBar.jsx";
+import { ScrollToTopButton } from "./components/ScrollToTopButton/ScrollToTopButton.jsx";
+import { Footer } from "./components/Footer/Footer.jsx";
+
+// ROUTS
+const Home = lazy(() => import("./pages/Home/Home.jsx"));
+const EnglishforEveryone = lazy(() =>
+  import("./pages/download/EnglishforEveryone/EnglishforEveryone.jsx")
+);
+const NotFound = lazy(() => import("./pages/NotFound/NotFound.jsx"));
+const SignIn = lazy(() => import("./pages/auth/SignIn/SignIn.jsx"));
+const SignUp = lazy(() => import("./pages/auth/SignUp/SignUp.jsx"));
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { theme, modeTheme, setModeTheme } = useContext(RootContext);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-        <NavLink to="/page1">Page 1</NavLink>
-        <NavLink to="/page2">Page 2</NavLink>
-        <NavLink to="/page3">Page 3</NavLink>
-      </div>
-      <div>
-        <Routes>
-          <Route path="/page1" element={<div>Page 1</div>} />
-          <Route path="/page2" element={<div>Page 2</div>} />
-          <Route path="/page3" element={<div>Page 3</div>} />
-        </Routes>
-        <Outlet />
-      </div>
-    </>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+      <header>
+        <HeaderBar setModeTheme={setModeTheme} modeTheme={modeTheme} />
+      </header>
+      <main style={{ flex: 1 }}>
+        <Container>
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/english-for-everyone"
+                element={<EnglishforEveryone />}
+              />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Outlet />
+          </Suspense>
+          <ScrollToTopButton theme={theme} />
+        </Container>
+      </main>
+      <footer style={{ flexShrink: 0 }}>
+        <Footer />
+      </footer>
+    </div>
   );
 }
 
