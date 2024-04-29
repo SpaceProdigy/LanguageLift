@@ -23,11 +23,17 @@ function App() {
   const { theme, modeTheme, setModeTheme } = useContext(RootContext);
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <header>
-        <HeaderBar setModeTheme={setModeTheme} modeTheme={modeTheme} />
-      </header>
-      <main style={{ flex: 1 }}>
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <HeaderBar setModeTheme={setModeTheme} modeTheme={modeTheme} />
+
+      <main style={{ flex: 1, width: "100%" }}>
         <Container>
           <Suspense fallback={<Loader />}>
             <Routes>
@@ -45,7 +51,7 @@ function App() {
           <ScrollToTopButton theme={theme} />
         </Container>
       </main>
-      <footer style={{ flexShrink: 0 }}>
+      <footer style={{ flexShrink: 0, width: "100%", maxWidth: 2048 }}>
         <Footer />
       </footer>
     </div>

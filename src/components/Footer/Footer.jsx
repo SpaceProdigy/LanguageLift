@@ -34,6 +34,7 @@ export const Footer = () => {
           </Typography>
         </M_QuoteWrapper>
       </Box>
+      <Divider />
     </>
   );
 };

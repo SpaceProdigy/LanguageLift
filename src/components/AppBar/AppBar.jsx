@@ -20,7 +20,7 @@ export const HeaderBar = ({ setModeTheme, modeTheme }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ width: "100%", maxWidth: 2048 }}>
       <AppBar position="static">
         <Toolbar
           style={{

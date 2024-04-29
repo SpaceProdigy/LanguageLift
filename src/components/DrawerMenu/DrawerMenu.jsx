@@ -10,33 +10,29 @@ import {
 } from "@mui/material";
 
 import PropTypes from "prop-types";
-
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LoginIcon from "@mui/icons-material/Login";
 import HomeIcon from "@mui/icons-material/Home";
-import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import { StyledNavLink } from "./DrawerMenu.styled";
-
-const routeFunc = (route) => {
-  if (route === "Home") {
-    return "/";
-  }
-  return `/${route.replace(/\s/g, "").toLowerCase()}`;
-};
+import { buttonAuthText, buttonText } from "../../locales/drawerMenu";
+import { useContext } from "react";
+import { RootContext } from "../../main";
 
 export default function DrawerMenu({ toggleDrawer, open }) {
+  const { language } = useContext(RootContext);
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {["Home", "English-for-Everyone"].map((text, index) => (
+        {buttonText.map(({ text, path }, index) => (
           <ListItem key={index} disablePadding>
-            <StyledNavLink to={routeFunc(text)}>
+            <StyledNavLink to={path}>
               <ListItemButton>
                 <ListItemIcon>
-                  {text === "Home" && <HomeIcon />}
-                  {text === "English-for-Everyone" && <TextSnippetIcon />}
+                  {path === "/" && <HomeIcon />}
+                  {path === "/english-for-everyone" && <LibraryBooksIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={text[language]} />
               </ListItemButton>
             </StyledNavLink>
           </ListItem>
@@ -44,15 +40,15 @@ export default function DrawerMenu({ toggleDrawer, open }) {
       </List>
       <Divider />
       <List>
-        {["Sign up", "Sign in"].map((text, index) => (
+        {buttonAuthText.map(({ text, path }, index) => (
           <ListItem key={index} disablePadding>
-            <StyledNavLink to={routeFunc(text)}>
+            <StyledNavLink to={path}>
               <ListItemButton>
                 <ListItemIcon>
-                  {text === "Sign up" && <AppRegistrationIcon />}
-                  {text === "Sign in" && <LoginIcon />}
+                  {path === "/signup" && <AppRegistrationIcon />}
+                  {path === "/signin" && <LoginIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={text[language]} />
               </ListItemButton>
             </StyledNavLink>
           </ListItem>

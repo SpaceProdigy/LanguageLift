@@ -44,4 +44,10 @@ export const WrapperHero = styled(Box)`
   height: 100vh;
   margin-left: -16px;
   margin-right: -16px;
+
+  @media screen and (min-width: 600px) {
+    margin-left: -24px;
+    margin-right: -24px;
+    width: calc(100% + 48px);
+  }
 `;
