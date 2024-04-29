@@ -1,4 +1,4 @@
-import{s as S,r as l,j as e,T as f}from"./index-Dz_bCseQ.js";import{u as j,F as u,I as m,O as d,a as g,o as I,l as b}from"./authShema-CqLiNH7u.js";import{B as v}from"./Button-ncLCGuHG.js";const y=S("form")`
+import{s as S,r as l,j as e,T as f}from"./index-CARgSuHx.js";import{u as j,F as u,I as m,O as d,a as g,o as I,l as b}from"./authShema-DB8kMCLl.js";import{B as v}from"./Button-CPO-HQEI.js";const y=S("form")`
   width: 90%;
   max-width: 400px;
   display: flex;
