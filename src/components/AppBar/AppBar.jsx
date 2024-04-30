@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ThemeButton } from "./ThemeButton/ThemeButton";
 import DrawerMenu from "../DrawerMenu/DrawerMenu";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import icon from "/public/eng256x256.png";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -12,11 +12,11 @@ import { RootContext } from "../../main";
 import { LanguageButton } from "./LanguageButton/LanguageButton";
 
 export const HeaderBar = ({ setModeTheme, modeTheme }) => {
-  const [open, setOpen] = useState(false);
-  const { language, setLanguage } = useContext(RootContext);
+  const { language, setLanguage, isDrawer, setIsDrawer } =
+    useContext(RootContext);
 
   const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
+    setIsDrawer(newOpen);
   };
 
   return (
@@ -60,7 +60,7 @@ export const HeaderBar = ({ setModeTheme, modeTheme }) => {
           </Box>
           <Box style={{ display: "flex", alignItems: "center" }}>
             <LanguageButton language={language} setLanguage={setLanguage} />
-            <DrawerMenu toggleDrawer={toggleDrawer} open={open} />
+            <DrawerMenu toggleDrawer={toggleDrawer} open={isDrawer} />
             <ThemeButton setModeTheme={setModeTheme} modeTheme={modeTheme} />
           </Box>
         </Toolbar>

@@ -18,15 +18,22 @@ import { StyledNavLink } from "./DrawerMenu.styled";
 import { buttonAuthText, buttonText } from "../../locales/drawerMenu";
 import { useContext } from "react";
 import { RootContext } from "../../main";
+import { useLocation } from "react-router-dom";
 
 export default function DrawerMenu({ toggleDrawer, open }) {
   const { language } = useContext(RootContext);
+  const { pathname } = useLocation();
+
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box
+      sx={{ width: 250, height: "100%" }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+    >
       <List>
         {buttonText.map(({ text, path }, index) => (
           <ListItem key={index} disablePadding>
-            <StyledNavLink to={path}>
+            <StyledNavLink to={path} state={pathname}>
               <ListItemButton>
                 <ListItemIcon>
                   {path === "/" && <HomeIcon />}

@@ -1,4 +1,12 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  OutlinedInput,
+  Typography,
+} from "@mui/material";
 import {
   ImageWrapper,
   Wrapper,
@@ -6,7 +14,7 @@ import {
 } from "./EnglishforEveryone.styled";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { RootContext } from "../../../main";
 import { Password } from "../../../components/Password/Password";
 import { enEveryOne } from "../../../locales/downloads/enEveryOne";
@@ -14,12 +22,38 @@ import LinkIcon from "@mui/icons-material/Link";
 import HttpIcon from "@mui/icons-material/Http";
 
 const EnglishforEveryone = () => {
+  const [isSearch, setIsSearch] = useState("");
+
   const { language } = useContext(RootContext);
+  const filterResult = enEveryOne.filter(({ name }) => {
+    return (
+      name["en"]
+        .toLocaleLowerCase()
+        .includes(isSearch.toLocaleLowerCase().trim()),
+      name["ua"]
+        .toLocaleLowerCase()
+        .includes(isSearch.toLocaleLowerCase().trim())
+    );
+  });
+
   return (
     <Wrapper>
       <Password />
-
-      {enEveryOne.map(({ name, link, img }, index) => (
+      <FormControl>
+        <InputLabel size="small">
+          {language === "en" ? "Search" : "Пошук"}
+        </InputLabel>
+        <OutlinedInput
+          label="Search"
+          size="small"
+          onChange={(e) => setIsSearch(e.target.value)}
+          value={isSearch}
+        />
+        <FormHelperText sx={{ height: 20 }}>
+          {language === "ua" ? "Нічого не знайдено" : "Nothing found"}
+        </FormHelperText>
+      </FormControl>
+      {filterResult.map(({ name, link, img }, index) => (
         <WrapperInfo key={index}>
           <Box>
             <ImageWrapper img={img} />

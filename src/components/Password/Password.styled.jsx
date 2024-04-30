@@ -1,4 +1,5 @@
 import { Box, styled } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 export const Wrapper = styled(Box)`
   position: absolute;
@@ -11,6 +12,17 @@ export const Wrapper = styled(Box)`
   box-shadow: ${({ theme }) => theme.shadows[11]};
   padding: 50px;
   border-radius: 5px;
+`;
+
+export const StyledLink = styled(NavLink)`
+  color: transparent;
+  text-decoration: none;
+`;
+
+export const WrapperBack = styled(Box)`
+  position: absolute;
+  left: 15px;
+  top: 15px;
 `;
 
 export const StyledInput = styled("input")`

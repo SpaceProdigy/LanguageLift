@@ -2,7 +2,7 @@
   "name": "english",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://SpaceProdigy.github.io/LanguageLift",
+  "homepage": "https://SpaceProdigy.github.io/",
   "type": "module",
   "scripts": {
     "start": "vite",

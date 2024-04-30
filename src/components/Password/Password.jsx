@@ -1,14 +1,17 @@
-import { Box, Modal, Typography, useTheme } from "@mui/material";
-
+import { Box, IconButton, Modal, Typography, useTheme } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
   NumberBox,
   StyledInput,
+  StyledLink,
   Wrapper,
+  WrapperBack,
   WrapperNumberBox,
 } from "./Password.styled";
 import { motion } from "framer-motion";
 import { RootContext } from "../../main";
+import { useLocation } from "react-router-dom";
 
 export const Password = () => {
   const [open, setOpen] = useState(
@@ -21,10 +24,11 @@ export const Password = () => {
   const passwordKey = "1234";
   const theme = useTheme();
   const { language } = useContext(RootContext);
-  console.log(!sessionStorage.getItem("English-For-Everyone"));
   const handleClose = () => setOpen(false);
   const keyError = key.length === 4 && passwordKey !== key;
   const keySuccess = passwordKey === key;
+
+  const { state } = useLocation();
 
   useEffect(() => {
     if (keySuccess) {
@@ -113,6 +117,14 @@ export const Password = () => {
     <>
       <Modal open={open}>
         <Wrapper>
+          <WrapperBack>
+            <StyledLink to={state}>
+              <IconButton>
+                <ArrowBackIcon />
+              </IconButton>
+            </StyledLink>
+          </WrapperBack>
+
           <Box
             sx={{
               display: "flex",

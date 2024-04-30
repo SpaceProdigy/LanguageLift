@@ -8,6 +8,7 @@ import mainTheme from "./styles/theme";
 export const RootContext = createContext();
 
 const Root = () => {
+  const [isDrawer, setIsDrawer] = useState(false);
   const [modeTheme, setModeTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark"
   );
@@ -29,7 +30,15 @@ const Root = () => {
     <React.StrictMode>
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <RootContext.Provider
-          value={{ theme, modeTheme, setModeTheme, language, setLanguage }}
+          value={{
+            theme,
+            modeTheme,
+            setModeTheme,
+            language,
+            setLanguage,
+            isDrawer,
+            setIsDrawer,
+          }}
         >
           <ThemeProvider theme={theme}>
             <CssBaseline enableColorScheme={true}>
