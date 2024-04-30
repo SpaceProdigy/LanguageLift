@@ -16,7 +16,7 @@ const Home = () => {
 
         <WrapperTitel>
           <Typography textAlign="center" variant="h4">
-            Language Lift
+            Language lift
           </Typography>
           <Typography variant="body2" textAlign="center" marginTop={1}>
             <ReactTyped

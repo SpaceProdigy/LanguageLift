@@ -52,7 +52,7 @@ export const HeaderBar = ({ setModeTheme, modeTheme }) => {
                     component="h6"
                     sx={{ flexGrow: 1 }}
                   >
-                    Language Lift
+                    Language lift
                   </Typography>
                 </Box>
               </motion.div>
