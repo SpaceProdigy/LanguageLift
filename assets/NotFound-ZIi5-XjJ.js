@@ -1,4 +1,4 @@
-import{s as e,B as n,N as s,j as t,T as o,e as i}from"./index-CARgSuHx.js";import{B as r}from"./Button-CPO-HQEI.js";const a=e(n)`
+import{s as n,B as e,N as s,j as t,T as o,f as i}from"./index-BhYU50di.js";import{B as r}from"./Button-C1_JSAt6.js";const a=n(e)`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -7,10 +7,10 @@ import{s as e,B as n,N as s,j as t,T as o,e as i}from"./index-CARgSuHx.js";impor
   flex-direction: column;
   align-items: center;
   gap: 20px;
-`,l=e(s)`
+`,l=n(s)`
   text-decoration: none;
   color: inherit;
-`,c=e(r)`
+`,c=n(r)`
   display: flex;
   align-items: center;
   justify-content: center;
