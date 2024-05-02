@@ -1,4 +1,4 @@
-import{s as n,B as e,N as s,j as t,T as o,k as i}from"./index-DwZ7KfNv.js";import{B as r}from"./Button-DbmCcSll.js";const a=n(e)`
+import{s as n,B as e,N as s,j as t,T as o,d as i}from"./index-CL5SmFiH.js";import{B as r}from"./Button-DHrd2LM3.js";const a=n(e)`
   position: absolute;
   top: 50%;
   left: 50%;
