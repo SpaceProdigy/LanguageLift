@@ -13,6 +13,13 @@ export const buttonText = [
     },
     path: "/english-for-everyone",
   },
+  {
+    text: {
+      en: "Schedule of lessons with Jill",
+      ua: "Розклад уроків з Джилл",
+    },
+    path: "/schedule-of-lessons-with-jill",
+  },
 ];
 
 export const buttonAuthText = [

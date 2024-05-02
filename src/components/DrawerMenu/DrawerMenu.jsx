@@ -7,6 +7,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useTheme,
 } from "@mui/material";
 
 import PropTypes from "prop-types";
@@ -14,6 +15,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LoginIcon from "@mui/icons-material/Login";
 import HomeIcon from "@mui/icons-material/Home";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { StyledNavLink } from "./DrawerMenu.styled";
 import { buttonAuthText, buttonText } from "../../locales/drawerMenu";
 import { useContext } from "react";
@@ -23,6 +25,8 @@ import { useLocation } from "react-router-dom";
 export default function DrawerMenu({ toggleDrawer, open }) {
   const { language } = useContext(RootContext);
   const { pathname } = useLocation();
+
+  const theme = useTheme();
 
   const DrawerList = (
     <Box
@@ -34,10 +38,18 @@ export default function DrawerMenu({ toggleDrawer, open }) {
         {buttonText.map(({ text, path }, index) => (
           <ListItem key={index} disablePadding>
             <StyledNavLink to={path} state={pathname}>
-              <ListItemButton>
+              <ListItemButton
+                sx={{
+                  background:
+                    pathname === path && theme.palette.action.selected,
+                }}
+              >
                 <ListItemIcon>
                   {path === "/" && <HomeIcon />}
                   {path === "/english-for-everyone" && <LibraryBooksIcon />}
+                  {path === "/schedule-of-lessons-with-jill" && (
+                    <CalendarMonthIcon />
+                  )}
                 </ListItemIcon>
                 <ListItemText primary={text[language]} />
               </ListItemButton>
@@ -50,7 +62,12 @@ export default function DrawerMenu({ toggleDrawer, open }) {
         {buttonAuthText.map(({ text, path }, index) => (
           <ListItem key={index} disablePadding>
             <StyledNavLink to={path}>
-              <ListItemButton>
+              <ListItemButton
+                sx={{
+                  background:
+                    pathname === path && theme.palette.action.selected,
+                }}
+              >
                 <ListItemIcon>
                   {path === "/signup" && <AppRegistrationIcon />}
                   {path === "/signin" && <LoginIcon />}

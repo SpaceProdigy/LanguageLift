@@ -39,7 +39,12 @@ const EnglishforEveryone = () => {
 
   return (
     <Wrapper>
-      <Password />
+      <Password
+        passwordKey={"1234"}
+        sessionKey={"English-For-Everyone"}
+        buttonBack={true}
+        openWithInitilizat={true}
+      />
       <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <FormControl size="small" fullWidth sx={{ maxWidth: 400 }}>
           <InputLabel>{language === "en" ? "Search" : "Пошук"}</InputLabel>

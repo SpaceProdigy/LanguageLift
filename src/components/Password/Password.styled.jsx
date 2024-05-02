@@ -24,6 +24,11 @@ export const WrapperBack = styled(Box)`
   left: 15px;
   top: 15px;
 `;
+export const WrapperClose = styled(Box)`
+  position: absolute;
+  right: 15px;
+  top: 15px;
+`;
 
 export const StyledInput = styled("input")`
   border-radius: 5px;

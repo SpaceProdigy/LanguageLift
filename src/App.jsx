@@ -18,6 +18,7 @@ const EnglishforEveryone = lazy(() =>
 const NotFound = lazy(() => import("./pages/NotFound/NotFound.jsx"));
 const SignIn = lazy(() => import("./pages/auth/SignIn/SignIn.jsx"));
 const SignUp = lazy(() => import("./pages/auth/SignUp/SignUp.jsx"));
+const Schedule = lazy(() => import("./pages/Schedule/Schedule.jsx"));
 
 function App() {
   const { theme, modeTheme, setModeTheme } = useContext(RootContext);
@@ -42,6 +43,11 @@ function App() {
                 path="/english-for-everyone"
                 element={<EnglishforEveryone />}
               />
+              <Route
+                path="/schedule-of-lessons-with-jill"
+                element={<Schedule />}
+              />
+
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="*" element={<NotFound />} />

@@ -1,5 +1,6 @@
 import { Box, IconButton, Modal, Typography, useTheme } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
   NumberBox,
@@ -7,21 +8,32 @@ import {
   StyledLink,
   Wrapper,
   WrapperBack,
+  WrapperClose,
   WrapperNumberBox,
 } from "./Password.styled";
 import { motion } from "framer-motion";
 import { RootContext } from "../../main";
 import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 
-export const Password = () => {
+export const Password = ({
+  passwordKey,
+  sessionKey,
+  buttonBack = false,
+  closeClickInside = false,
+  openWithInitilizat = false,
+  openModal = false,
+  setOpenModal = false,
+  buttonClose = false,
+}) => {
   const [open, setOpen] = useState(
-    !sessionStorage.getItem("English-For-Everyone")
+    openWithInitilizat ?? !sessionStorage.getItem(sessionKey)
   );
   const [isFocus, setIsFocus] = useState(null);
   const refInput = useRef({ 1: "", 2: "", 3: "", 4: "" });
   const [password, setPassword] = useState({ 1: "", 2: "", 3: "", 4: "" });
   const key = Object.values(password).join("");
-  const passwordKey = "1234";
+
   const theme = useTheme();
   const { language } = useContext(RootContext);
   const handleClose = () => setOpen(false);
@@ -32,13 +44,16 @@ export const Password = () => {
 
   useEffect(() => {
     if (keySuccess) {
-      sessionStorage.setItem("English-For-Everyone", "access");
+      sessionStorage.setItem(sessionKey, "access");
 
       setTimeout(() => {
+        if (setOpenModal) {
+          setOpenModal(false);
+        }
         handleClose();
       }, 500);
     }
-  }, [keySuccess]);
+  }, [keySuccess, sessionKey, setOpenModal]);
 
   useEffect(() => {
     if (key.length === 4) {
@@ -115,15 +130,42 @@ export const Password = () => {
   };
   return (
     <>
-      <Modal open={open}>
+      <Modal
+        open={openModal ? openModal : open}
+        onClose={() => {
+          if (closeClickInside) {
+            setOpen(false);
+          }
+          if (setOpenModal) {
+            setOpenModal(false);
+          }
+        }}
+      >
         <Wrapper>
-          <WrapperBack>
-            <StyledLink to={state}>
-              <IconButton>
-                <ArrowBackIcon />
+          {buttonBack && (
+            <WrapperBack>
+              <StyledLink to={state}>
+                <IconButton>
+                  <ArrowBackIcon />
+                </IconButton>
+              </StyledLink>
+            </WrapperBack>
+          )}
+          {buttonClose && (
+            <WrapperClose>
+              <IconButton
+                onClick={() => {
+                  if (setOpenModal) {
+                    setOpenModal(false);
+                  } else {
+                    setOpen(false);
+                  }
+                }}
+              >
+                <CloseIcon />
               </IconButton>
-            </StyledLink>
-          </WrapperBack>
+            </WrapperClose>
+          )}
 
           <Box
             sx={{
@@ -156,6 +198,7 @@ export const Password = () => {
                       onChange={(e) => handleChange(e, item)}
                       value={password[item]}
                       autoComplete="off"
+                      autoFocus={index === 0}
                       onKeyDown={(e) => handleKeyDown(e, item)}
                       onFocus={() => setIsFocus(item)}
                       type="tel"
@@ -168,11 +211,13 @@ export const Password = () => {
             <motion.div
               animate={{ opacity: keyError || keySuccess ? 1 : 0 }}
               transition={{ duration: 0.5 }}
-              style={{ height: 50 }}
+              style={{ height: 50, width: "100%" }}
             >
-              <Typography
-                variant="caption"
-                textAlign="center"
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                gap={0}
                 color={
                   keyError
                     ? theme.palette.error.main
@@ -180,15 +225,46 @@ export const Password = () => {
                 }
               >
                 {keyError &&
-                  (language === "en"
-                    ? "The password is incorrect, please try again"
-                    : "Пароль невірний, спробуйте ще раз")}
-                {keySuccess && (language === "en" ? "Success" : "Yспіх")}
-              </Typography>
+                  (language === "en" ? (
+                    <>
+                      <Typography
+                        variant="subtitle2"
+                        component="span"
+                        textAlign="center"
+                      >
+                        The password is incorrect,
+                      </Typography>
+
+                      <Typography
+                        variant="subtitle2"
+                        component="span"
+                        textAlign="center"
+                      >
+                        please try again
+                      </Typography>
+                    </>
+                  ) : (
+                    "Пароль невірний, спробуйте ще раз"
+                  ))}
+                <Typography variant="h6" component="span" textAlign="center">
+                  {keySuccess && (language === "en" ? "Success" : "Yспіх")}
+                </Typography>
+              </Box>
             </motion.div>
           </Box>
         </Wrapper>
       </Modal>
     </>
   );
+};
+
+Password.propTypes = {
+  passwordKey: PropTypes.string.isRequired,
+  sessionKey: PropTypes.string.isRequired,
+  buttonBack: PropTypes.bool,
+  closeClickInside: PropTypes.bool,
+  openWithInitilizat: PropTypes.bool,
+  openModal: PropTypes.bool,
+  setOpenModal: PropTypes.func,
+  buttonClose: PropTypes.bool,
 };
