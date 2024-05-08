@@ -3,31 +3,37 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "dayjs/locale/uk";
 import { ukUA, enUS } from "@mui/x-date-pickers/locales";
-import { RootContext } from "../../main";
-import { useContext, useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 
 import { Box, FormHelperText } from "@mui/material";
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../redux/localOperation";
+
 BasicDatePicker.propTypes = {
   setErrorDate: PropTypes.func,
   errorDate: PropTypes.bool,
   setValueDate: PropTypes.func,
+  isDay: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf([null])]),
 };
 
 export default function BasicDatePicker({
   errorDate,
   setErrorDate,
   setValueDate,
+  isDay,
 }) {
   const [isDate, setIsDate] = useState(
-    dayjs(new Date()).$d.toLocaleDateString() ?? ""
+    dayjs(isDay ?? dayjs(new Date()).format("DD.MM.YYYY"))
   );
+
   const [isPast, setIsPast] = useState(null);
-  const { language } = useContext(RootContext);
+  const language = useSelector(selectLanguage);
   const datePattern = /^\d{2}\.\d{2}\.20\d{2}$/;
   const yearsIsCorrect = datePattern.test(isDate);
-
+  console.log("isDate", isDate);
   useEffect(() => {
     setValueDate(isDate);
   }, [isDate, setValueDate]);
@@ -47,8 +53,8 @@ export default function BasicDatePicker({
 
   const errorFnc = () => {
     if (errorDate) {
-      if (!yearsIsCorrect && isDate !== "") {
-        return language === "en" ? "Year is incorrect" : "Рік неправильний";
+      if (!yearsIsCorrect) {
+        return language === "en" ? "Incorrect date" : "Неправильна дата";
       }
       if (isDate === "") {
         return language === "en"
@@ -78,12 +84,20 @@ export default function BasicDatePicker({
           sx={{ width: "100%" }}
           label={language === "en" ? "Select a date" : "Виберіть дату"}
           disablePast={true}
-          defaultValue={dayjs(new Date())}
+          defaultValue={dayjs(isDay ?? new Date())}
           format="DD/MM/YYYY"
-          onChange={(e) => setIsDate(e.$d.toLocaleDateString())}
+          onChange={(e) => setIsDate(dayjs(e.$d).format("DD.MM.YYYY"))}
           onError={(e) => setIsPast(e)}
         />
-        <FormHelperText sx={{ height: 30 }} error>
+        <FormHelperText
+          sx={{
+            height: 30,
+            overflow: "auto",
+            whiteSpace: "nowrap",
+            scrollbarWidth: "thin",
+          }}
+          error
+        >
           {errorFnc()}
         </FormHelperText>
       </LocalizationProvider>

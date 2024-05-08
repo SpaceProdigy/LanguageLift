@@ -10,6 +10,10 @@ export const quotes = {
     "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
     "You miss 100% of the shots you don't take. - Wayne Gretzky",
     "Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+    "The only way to do great work is to love what you do. - Steve Jobs",
+    "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+    "Life is what happens when you're busy making other plans. - John Lennon",
+    "The best time to plant a tree was 20 years ago. The second best time is now. - Chinese Proverb",
   ],
   ua: [
     "Єдиний спосіб зробити велику справу - це любити те, що ви робите. - Стів Джобс",
@@ -22,5 +26,9 @@ export const quotes = {
     "Майбутнє належить тим, хто вірить у красу своїх мрій. - Елеонор Рузвельт",
     "Ви пропускаєте 100% кидків, які не робите. - Уейн Гретцкі",
     "Не дивіться на годинник; робіть те, що він робить. Продовжуйте. - Сем Левенсон",
+    "Єдиний спосіб зробити велику справу - це любити те, що ви робите. - Стів Джобс",
+    "Найбільша слава в житті полягає не в тому, щоб ніколи не впасти, а в тому, щоб підніматися кожного разу, коли ми падаємо. - Нельсон Мандела",
+    "Життя - це те, що відбувається, коли ви зайняті іншими планами. - Джон Леннон",
+    "Найкращий час посадити дерево був 20 років тому. Другий найкращий час - зараз. - Китайська приказка",
   ],
 };

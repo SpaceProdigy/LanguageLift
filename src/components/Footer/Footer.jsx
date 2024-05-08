@@ -1,12 +1,14 @@
 import { Box, Divider, Typography } from "@mui/material";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { M_QuoteWrapper } from "./Footer.styled";
 import { quotes } from "../../locales/footer";
-import { RootContext } from "../../main";
+
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../redux/localOperation";
 
 export const Footer = () => {
-  const { language } = useContext(RootContext);
+  const language = useSelector(selectLanguage);
   const [quote, setQuote] = useState("");
 
   useEffect(() => {

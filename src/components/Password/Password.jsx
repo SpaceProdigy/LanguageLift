@@ -1,7 +1,7 @@
 import { Box, IconButton, Modal, Typography, useTheme } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   NumberBox,
   StyledInput,
@@ -12,9 +12,11 @@ import {
   WrapperNumberBox,
 } from "./Password.styled";
 import { motion } from "framer-motion";
-import { RootContext } from "../../main";
+
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../redux/localOperation";
 
 export const Password = ({
   passwordKey,
@@ -26,6 +28,7 @@ export const Password = ({
   setOpenModal = false,
   buttonClose = false,
 }) => {
+  const language = useSelector(selectLanguage);
   const [open, setOpen] = useState(
     openWithInitilizat ?? !sessionStorage.getItem(sessionKey)
   );
@@ -35,7 +38,7 @@ export const Password = ({
   const key = Object.values(password).join("");
 
   const theme = useTheme();
-  const { language } = useContext(RootContext);
+
   const handleClose = () => setOpen(false);
   const keyError = key.length === 4 && passwordKey !== key;
   const keySuccess = passwordKey === key;
@@ -117,16 +120,16 @@ export const Password = ({
 
   const borderNumber = (item) => {
     if (key === passwordKey) {
-      return theme.palette.success.main;
+      return theme?.palette?.success?.main;
     }
     if (key.length === 4 && passwordKey !== key) {
-      return theme.palette.error.main;
+      return theme?.palette?.error?.main;
     }
 
     if (password[item]) {
-      return theme.palette.info.main;
+      return theme?.palette?.info?.main;
     }
-    return theme.palette.text.primary;
+    return theme?.palette?.text?.primary;
   };
   return (
     <>
@@ -144,7 +147,7 @@ export const Password = ({
         <Wrapper>
           {buttonBack && (
             <WrapperBack>
-              <StyledLink to={state}>
+              <StyledLink to={state ?? "/"}>
                 <IconButton>
                   <ArrowBackIcon />
                 </IconButton>
@@ -198,7 +201,7 @@ export const Password = ({
                       onChange={(e) => handleChange(e, item)}
                       value={password[item]}
                       autoComplete="off"
-                      autoFocus={index === 0}
+                      autoFocus={item === 1}
                       onKeyDown={(e) => handleKeyDown(e, item)}
                       onFocus={() => setIsFocus(item)}
                       type="tel"
@@ -244,7 +247,23 @@ export const Password = ({
                       </Typography>
                     </>
                   ) : (
-                    "Пароль невірний, спробуйте ще раз"
+                    <>
+                      <Typography
+                        variant="subtitle2"
+                        component="span"
+                        textAlign="center"
+                      >
+                        Пароль невірний,
+                      </Typography>
+
+                      <Typography
+                        variant="subtitle2"
+                        component="span"
+                        textAlign="center"
+                      >
+                        спробуйте ще раз
+                      </Typography>
+                    </>
                   ))}
                 <Typography variant="h6" component="span" textAlign="center">
                   {keySuccess && (language === "en" ? "Success" : "Yспіх")}

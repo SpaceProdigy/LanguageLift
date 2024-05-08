@@ -10,7 +10,6 @@ import {
   useTheme,
 } from "@mui/material";
 
-import PropTypes from "prop-types";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LoginIcon from "@mui/icons-material/Login";
@@ -18,13 +17,25 @@ import HomeIcon from "@mui/icons-material/Home";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { StyledNavLink } from "./DrawerMenu.styled";
 import { buttonAuthText, buttonText } from "../../locales/drawerMenu";
-import { useContext } from "react";
-import { RootContext } from "../../main";
-import { useLocation } from "react-router-dom";
 
-export default function DrawerMenu({ toggleDrawer, open }) {
-  const { language } = useContext(RootContext);
+import { useLocation } from "react-router-dom";
+import {
+  selectAppBarDrawer,
+  selectLanguage,
+  setAppBarDrawer,
+} from "../../redux/localOperation";
+import { useDispatch, useSelector } from "react-redux";
+
+export default function DrawerMenu() {
   const { pathname } = useLocation();
+  const language = useSelector(selectLanguage);
+  const appDruwerBar = useSelector(selectAppBarDrawer);
+
+  const dispatch = useDispatch();
+
+  const toggleDrawer = (value) => {
+    dispatch(setAppBarDrawer(value));
+  };
 
   const theme = useTheme();
 
@@ -32,7 +43,7 @@ export default function DrawerMenu({ toggleDrawer, open }) {
     <Box
       sx={{ width: 250, height: "100%" }}
       role="presentation"
-      onClick={toggleDrawer(false)}
+      onClick={() => toggleDrawer(false)}
     >
       <List>
         {buttonText.map(({ text, path }, index) => (
@@ -83,14 +94,9 @@ export default function DrawerMenu({ toggleDrawer, open }) {
 
   return (
     <div>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      <Drawer open={appDruwerBar} onClose={() => toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
     </div>
   );
 }
-
-DrawerMenu.propTypes = {
-  open: PropTypes.bool,
-  toggleDrawer: PropTypes.func,
-};

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { Box } from "@mui/material";
-import PropTypes from "prop-types";
+import { Box, useTheme } from "@mui/material";
 
-export const ScrollToTopButton = ({ theme }) => {
+export const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
-
+  const theme = useTheme();
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -49,8 +48,4 @@ export const ScrollToTopButton = ({ theme }) => {
       </IconButton>
     </Box>
   );
-};
-
-ScrollToTopButton.propTypes = {
-  theme: PropTypes.object,
 };

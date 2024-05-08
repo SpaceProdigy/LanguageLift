@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -14,18 +15,19 @@ import {
 } from "./EnglishforEveryone.styled";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import { useContext, useState } from "react";
-import { RootContext } from "../../../main";
+
 import { Password } from "../../../components/Password/Password";
 import { enEveryOne } from "../../../locales/downloads/enEveryOne";
 import LinkIcon from "@mui/icons-material/Link";
 import HttpIcon from "@mui/icons-material/Http";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../../redux/localOperation";
 
 const EnglishforEveryone = () => {
   const [isSearch, setIsSearch] = useState("");
 
-  const { language } = useContext(RootContext);
+  const language = useSelector(selectLanguage);
   const filterResult = enEveryOne.filter(({ name }) => {
     return (
       name["en"]

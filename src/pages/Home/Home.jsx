@@ -3,11 +3,11 @@ import { About } from "../../components/About/About";
 import { TypingText, homeInfo } from "../../locales/home";
 import { Hero, WrapperHero, WrapperTitel } from "./Home.styled";
 import { ReactTyped } from "react-typed";
-import { useContext } from "react";
-import { RootContext } from "../../main";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../redux/localOperation";
 
 const Home = () => {
-  const { language } = useContext(RootContext);
+  const language = useSelector(selectLanguage);
 
   return (
     <>

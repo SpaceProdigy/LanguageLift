@@ -1,24 +1,16 @@
 import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
-import PropTypes from "prop-types";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ThemeButton } from "./ThemeButton/ThemeButton";
 import DrawerMenu from "../DrawerMenu/DrawerMenu";
-import { useContext } from "react";
-import icon from "/public/eng256x256.png";
+import icon from "/src/pictures/appBar/eng256x256.png";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-
-import { RootContext } from "../../main";
 import { LanguageButton } from "./LanguageButton/LanguageButton";
+import { useDispatch } from "react-redux";
+import { setAppBarDrawer } from "../../redux/localOperation";
 
-export const HeaderBar = ({ setModeTheme, modeTheme }) => {
-  const { language, setLanguage, isDrawer, setIsDrawer } =
-    useContext(RootContext);
-
-  const toggleDrawer = (newOpen) => () => {
-    setIsDrawer(newOpen);
-  };
-
+export const HeaderBar = () => {
+  const dispatch = useDispatch();
   return (
     <Box sx={{ width: "100%", maxWidth: 2048 }}>
       <AppBar position="static">
@@ -36,7 +28,7 @@ export const HeaderBar = ({ setModeTheme, modeTheme }) => {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={toggleDrawer(true)}
+              onClick={() => dispatch(setAppBarDrawer(true))}
             >
               <MenuIcon />
             </IconButton>
@@ -59,17 +51,12 @@ export const HeaderBar = ({ setModeTheme, modeTheme }) => {
             </NavLink>
           </Box>
           <Box style={{ display: "flex", alignItems: "center" }}>
-            <LanguageButton language={language} setLanguage={setLanguage} />
-            <DrawerMenu toggleDrawer={toggleDrawer} open={isDrawer} />
-            <ThemeButton setModeTheme={setModeTheme} modeTheme={modeTheme} />
+            <LanguageButton />
+            <DrawerMenu />
+            <ThemeButton />
           </Box>
         </Toolbar>
       </AppBar>
     </Box>
   );
-};
-
-HeaderBar.propTypes = {
-  setModeTheme: PropTypes.func.isRequired,
-  modeTheme: PropTypes.oneOf(["light", "dark"]).isRequired,
 };

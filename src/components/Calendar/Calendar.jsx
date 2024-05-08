@@ -1,93 +1,135 @@
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers";
-import { Badge, Tooltip, Typography, useTheme } from "@mui/material";
-import { PickersDay } from "@mui/x-date-pickers";
-import SchoolIcon from "@mui/icons-material/School";
+import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
+import { Box, Paper } from "@mui/material";
 import PropTypes from "prop-types";
 import "dayjs/locale/uk";
 import { ukUA, enUS } from "@mui/x-date-pickers/locales";
-import { RootContext } from "../../main";
-import { useContext } from "react";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { ModalCalendar } from "./ModalCallendar/ModalCallendar";
+import { DayItem } from "./DayItem/DayItem";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../redux/localOperation";
+import {
+  selectLessonsJillArr,
+  selectLessonsJillLoading,
+} from "../../redux/englishLessonsSlice";
+import dayjs from "dayjs";
 
-export default function Calendar({ actualSchedule }) {
-  const { language } = useContext(RootContext);
-  const theme = useTheme();
-  console.log(actualSchedule);
+export default function Calendar({
+  handleAddALesson,
+  setIsDay,
+  isEdit,
+  setIsEdit,
+  open,
+  setIsChooseALesson,
+  isChooseALesson,
+  isDay,
+  setValueSelect,
+  permission,
+  isDeleteModal,
+  setIsDeleteModal,
+}) {
+  const [isModal, setIsModal] = useState(false);
+  const language = useSelector(selectLanguage);
+  const isLoading = useSelector(selectLessonsJillLoading);
+  const LessonsJillArr = useSelector(selectLessonsJillArr);
+
+  const handleClose = () => {
+    setIsDay(null);
+    setIsModal(false);
+  };
 
   const shouldDisplayBadge = ({ day }) => {
-    const dayOfMonth = day.$d.toLocaleDateString();
-    return actualSchedule?.filter(({ date }) => dayOfMonth === date);
+    const dayOfMonth = dayjs(day.$d).format("DD.MM.YYYY");
+    return LessonsJillArr?.filter(({ date }) => dayOfMonth === date);
   };
 
   return (
-    <LocalizationProvider
-      dateAdapter={AdapterDayjs}
-      localeText={
-        language === "ua"
-          ? ukUA.components.MuiLocalizationProvider.defaultProps.localeText
-          : enUS.components.MuiLocalizationProvider.defaultProps.localeText
-      }
-      adapterLocale={language === "ua" ? "uk" : "en"}
-    >
-      <DateCalendar
-        key={language}
+    <Box>
+      <Paper
+        elevation={1}
         sx={{
-          width: "100%",
-          maxWidth: 320,
+          p: 2,
+          position: "relative",
+          boxShadow: "0px 0px 4px -2px rgba(0,0,0,0.52)",
         }}
-        slots={{
-          day: (props) => {
-            const shouldDisplay = shouldDisplayBadge(props);
-            console.log(shouldDisplay);
-            return (
-              <Tooltip
-                title={
-                  shouldDisplay[0]?.location && (
-                    <div>
-                      <Typography variant="subtitle2" textAlign="center">
-                        {shouldDisplay[0]?.location}
-                      </Typography>
-
-                      <Typography variant="subtitle2" textAlign="center">
-                        {shouldDisplay[0]?.time}
-                      </Typography>
-                    </div>
-                  )
-                }
-                placement="top-end"
-              >
-                <Badge
-                  overlap="circular"
-                  badgeContent={
-                    shouldDisplay.length > 0 && (
-                      <SchoolIcon
-                        fontSize="small"
-                        sx={{ color: theme.palette.success.main }}
-                      />
-                    )
-                  }
-                >
-                  <PickersDay
-                    {...props}
-                    sx={{
-                      border: props.today
-                        ? `solid 2px ${theme.palette.info.main} !important`
-                        : shouldDisplay.length > 0 &&
-                          `solid 2px ${theme.palette.success.main}`,
-                    }}
+      >
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={
+            language === "ua"
+              ? ukUA.components.MuiLocalizationProvider.defaultProps.localeText
+              : enUS.components.MuiLocalizationProvider.defaultProps.localeText
+          }
+          adapterLocale={language === "ua" ? "uk" : "en"}
+        >
+          <DateCalendar
+            onChange={(e) => setIsDay(e)}
+            key={language}
+            sx={{
+              width: "100%",
+              maxWidth: 320,
+            }}
+            loading={isLoading}
+            renderLoading={() => <DayCalendarSkeleton />}
+            slots={{
+              day: (props) => {
+                const shouldDisplay = shouldDisplayBadge(props);
+                // console.log(props);
+                // console.log(shouldDisplay);
+                return (
+                  <DayItem
+                    setIsModal={setIsModal}
+                    setIsEdit={setIsEdit}
+                    shouldDisplay={shouldDisplay}
+                    props={props}
                   />
-                </Badge>
-              </Tooltip>
-            );
-          },
-        }}
-      />
-    </LocalizationProvider>
+                );
+              },
+            }}
+          />
+        </LocalizationProvider>
+        <AnimatePresence>
+          {isModal && (
+            <ModalCalendar
+              open={open}
+              isEdit={isEdit}
+              setIsEdit={setIsEdit}
+              handleClose={handleClose}
+              language={language}
+              handleAddALesson={handleAddALesson}
+              setIsChooseALesson={setIsChooseALesson}
+              isChooseALesson={isChooseALesson}
+              isDay={isDay}
+              setValueSelect={setValueSelect}
+              permission={permission}
+              isDeleteModal={isDeleteModal}
+              setIsDeleteModal={setIsDeleteModal}
+            />
+          )}
+        </AnimatePresence>
+      </Paper>
+    </Box>
   );
 }
 
 Calendar.propTypes = {
   today: PropTypes.bool,
-  actualSchedule: PropTypes.array,
+  handleAddALesson: PropTypes.func,
+  setIsDay: PropTypes.func,
+  isDay: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf([null])]),
+  isEdit: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  setIsEdit: PropTypes.func,
+  open: PropTypes.bool,
+  setIsChooseALesson: PropTypes.func,
+  isChooseALesson: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([null]),
+  ]),
+  setValueSelect: PropTypes.func,
+  permission: PropTypes.bool,
+  isDeleteModal: PropTypes.bool,
+  setIsDeleteModal: PropTypes.func,
 };

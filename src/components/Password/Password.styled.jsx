@@ -8,7 +8,7 @@ export const Wrapper = styled(Box)`
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: 400px;
-  background-color: ${({ theme }) => theme.palette.background.paper};
+  background-color: ${({ theme }) => theme?.palette?.background?.paper};
   box-shadow: ${({ theme }) => theme.shadows[11]};
   padding: 50px;
   border-radius: 5px;

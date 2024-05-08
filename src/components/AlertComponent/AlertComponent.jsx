@@ -1,13 +1,11 @@
 import { ToastContainer } from "react-toastify";
-
-import PropTypes from "prop-types";
 import "react-toastify/dist/ReactToastify.css";
-import { useContext } from "react";
-import { RootContext } from "../../main";
 import { useMediaQuery } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectTheme } from "../../redux/localOperation";
 
 export const AlertComponent = () => {
-  const { modeTheme } = useContext(RootContext);
+  const mode = useSelector(selectTheme);
   const screenWidth = useMediaQuery("(max-width:480px)");
 
   return (
@@ -29,14 +27,8 @@ export const AlertComponent = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme={modeTheme}
+        theme={mode}
       />
     </div>
   );
-};
-
-AlertComponent.propTypes = {
-  text: PropTypes.string,
-  status: PropTypes.string,
-  notify: PropTypes.func,
 };
