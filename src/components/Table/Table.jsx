@@ -26,6 +26,7 @@ import {
 } from "../../redux/englishLessonsSlice";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { lessonsPlaces } from "../../locales/localesJill";
 
 BasicTable.propTypes = {
   isDeleteModal: PropTypes.bool,
@@ -58,9 +59,9 @@ export default function BasicTable({
   const screenWidthBigger600 = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
 
-  const currenMonthArr = LessonsJillArr.filter(({ date }) =>
-    date?.slice(3).includes(selectMonth)
-  );
+  const currenMonthArr = LessonsJillArr.filter(({ date }) => {
+    return dayjs(date).format("YYYY-MM") === selectMonth;
+  });
 
   const sortArr = currenMonthArr.sort((a, b) => {
     const dateA = new Date(a.time[0]);
@@ -112,11 +113,13 @@ export default function BasicTable({
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="center">
-                  {screenWidthBigger600
-                    ? location
-                    : location === "Zwanenhof"
-                    ? "ZW"
-                    : "MM"}
+                  {screenWidthBigger600 && location}
+                  {!screenWidthBigger600 &&
+                    location === lessonsPlaces.zwanenhof.fullName &&
+                    lessonsPlaces.zwanenhof.shortName}
+                  {!screenWidthBigger600 &&
+                    location === lessonsPlaces.mariaMediatrix.fullName &&
+                    lessonsPlaces.mariaMediatrix.shortName}
                 </TableCell>
 
                 <TableCell align="center">{date}</TableCell>

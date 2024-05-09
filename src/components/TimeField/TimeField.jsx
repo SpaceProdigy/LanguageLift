@@ -42,7 +42,7 @@ export default function TimeField({
 }) {
   const language = useSelector(selectLanguage);
   const LessonsJillArr = useSelector(selectLessonsJillArr);
-  console.log(valueTime);
+  console.log(dayjs("2025-05-20T17:00"));
   const addInitialTime = () => {
     if (isEdit?.edit) {
       const timeArr = isEdit?.data?.[isChooseALesson ?? 0]?.time;
@@ -50,13 +50,13 @@ export default function TimeField({
     }
     if (isDay) {
       return [
-        dayjs(`${dayjs(isDay).format("DD.MM.YYYY")}T17:00`),
-        dayjs(`${dayjs(isDay).format("DD.MM.YYYY")}T18:30`),
+        dayjs(`${dayjs(isDay).format("YYYY-MM-DD")}T17:00`),
+        dayjs(`${dayjs(isDay).format("YYYY-MM-DD")}T18:30`),
       ];
     } else {
       return [
-        dayjs(`${dayjs(new Date()).format("DD.MM.YYYY")}T17:00`),
-        dayjs(`${dayjs(new Date()).format("DD.MM.YYYY")}T18:30`),
+        dayjs(`${dayjs(new Date()).format("YYYY-MM-DD")}T17:00`),
+        dayjs(`${dayjs(new Date()).format("YYYY-MM-DD")}T18:30`),
       ];
     }
   };
@@ -143,8 +143,8 @@ export default function TimeField({
           defaultValue={addInitialTime()}
           onChange={(e) => {
             setValueTime([
-              dayjs(`${dayjs(e[0]).format("DD.MM.YYYYTHH:mm")}`),
-              dayjs(`${dayjs(e[1]).format("DD.MM.YYYYTHH:mm")}`),
+              dayjs(`${dayjs(e[0]).format("YYYY-MM-DDTHH:mm")}`),
+              dayjs(`${dayjs(e[1]).format("YYYY-MM-DDTHH:mm")}`),
             ]);
           }}
           onError={(e) => {

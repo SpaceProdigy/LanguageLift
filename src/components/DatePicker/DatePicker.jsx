@@ -26,14 +26,18 @@ export default function BasicDatePicker({
   isDay,
 }) {
   const [isDate, setIsDate] = useState(
-    dayjs(isDay ?? dayjs(new Date()).format("DD.MM.YYYY"))
+    isDay
+      ? dayjs(isDay).format("YYYY-MM-DD")
+      : dayjs(new Date()).format("YYYY-MM-DD")
   );
 
   const [isPast, setIsPast] = useState(null);
   const language = useSelector(selectLanguage);
-  const datePattern = /^\d{2}\.\d{2}\.20\d{2}$/;
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
   const yearsIsCorrect = datePattern.test(isDate);
+
   console.log("isDate", isDate);
+
   useEffect(() => {
     setValueDate(isDate);
   }, [isDate, setValueDate]);
@@ -85,8 +89,8 @@ export default function BasicDatePicker({
           label={language === "en" ? "Select a date" : "Виберіть дату"}
           disablePast={true}
           defaultValue={dayjs(isDay ?? new Date())}
-          format="DD/MM/YYYY"
-          onChange={(e) => setIsDate(dayjs(e.$d).format("DD.MM.YYYY"))}
+          format="YYYY-MM-DD"
+          onChange={(e) => setIsDate(dayjs(e.$d).format("YYYY-MM-DD"))}
           onError={(e) => setIsPast(e)}
         />
         <FormHelperText

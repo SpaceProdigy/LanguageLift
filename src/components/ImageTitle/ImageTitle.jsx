@@ -15,7 +15,9 @@ export default function ImageTitle({ tipingText, image, title }) {
       <HeaderFotoBox image={image}>
         <Wrapper>
           <WrapperTitle>
-            <Typography variant="inherit">{title}</Typography>
+            <Typography variant="inherit" textAlign="center">
+              {title}
+            </Typography>
             <Typography variant="h6">
               {tipingText && (
                 <ReactTyped

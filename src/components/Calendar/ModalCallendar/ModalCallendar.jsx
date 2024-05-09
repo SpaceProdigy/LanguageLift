@@ -26,6 +26,7 @@ import { selectLessonsJillLoading } from "../../../redux/englishLessonsSlice";
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
+import { lessonsPlaces } from "../../../locales/localesJill";
 export const ModalCalendar = ({
   isEdit,
   handleClose,
@@ -45,7 +46,9 @@ export const ModalCalendar = ({
   const navigate = useNavigate();
   useEffect(() => {
     if (isEdit?.data) {
-      setValueSelect(isEdit?.data[0]?.location ?? "Zwanenhof");
+      setValueSelect(
+        isEdit?.data[0]?.location ?? lessonsPlaces.defaultPlace.fullName
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -75,7 +78,7 @@ export const ModalCalendar = ({
           <Box>
             <WrapperClose>
               <Typography variant="subtitle2">
-                {dayjs(isDay).format("DD.MM.YYYY")}
+                {dayjs(isDay).format("YYYY-MM-DD")}
               </Typography>
 
               <IconButton onClick={handleClose} size="small">
@@ -105,10 +108,15 @@ export const ModalCalendar = ({
                     <MenuItem key={index} value={index}>
                       <Typography variant="subtitle2">
                         <Typography component="span">
-                          {location === "Zwanenhof" ? "ZW " : "MM "}
+                          {location === lessonsPlaces.zwanenhof.fullName &&
+                            lessonsPlaces.zwanenhof.shortName}
+                          {location === lessonsPlaces.mariaMediatrix.fullName &&
+                            lessonsPlaces.mariaMediatrix.shortName}
                         </Typography>
                         <Typography component="span">
-                          {time[0]?.slice(11)} - {time[1]?.slice(11)}
+                          {" "}
+                          {dayjs(time[0]).format("HH:mm")} -{" "}
+                          {dayjs(time[1]).format("HH:mm")}
                         </Typography>
                       </Typography>
                     </MenuItem>

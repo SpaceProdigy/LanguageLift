@@ -115,7 +115,6 @@ export default function MaterialfromJill() {
   //   );
   // }, [dicpatch, location.pathname]);
 
-  console.log(88.25476128754238);
   return (
     <>
       <AlertComponent />
@@ -124,54 +123,55 @@ export default function MaterialfromJill() {
         title={language === "en" ? "Lesson materials" : "Матеріали уроку"}
       />
       {/* ///////////////////////////////// */}
-      <div>
-        <Button
-          component="label"
-          role={undefined}
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-        >
-          {language === "en" ? "Upload file" : "Завантажити файл"}
-          <VisuallyHiddenInput
-            type="file"
-            onChange={handleFileChange}
-            multiple
-            accept=".jpg, .jpeg, .png"
-          />
-        </Button>
-
-        <button onClick={handleUpload}>Upload</button>
-        {/* <button onClick={() => uploadTask.pause()}>pause</button>
-        <button onClick={() => uploadTask.resume()}>resume</button>
-        <button onClick={() => uploadTask.cancel()}>cancel</button> */}
-        {/* Кнопка для загрузки выбранного файла */}
-      </div>
-      <Box sx={{ position: "relative", display: "inline-flex" }}>
-        <CircularProgress variant="determinate" value={loadingProgress} />
-        <Box
-          sx={{
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            position: "absolute",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography variant="caption" component="div" color="text.secondary">
-            {`${Math.round(loadingProgress)}%`}
-          </Typography>
-        </Box>
-      </Box>
-      {picturesArr.length > 0 &&
-        picturesArr.map((imegeLink, index) => (
-          <Box key={index}>
-            <img src={imegeLink} style={{ width: "100%" }} />
-          </Box>
-        ))}
     </>
   );
 }
+
+//    <div>
+//         <Button
+//           component="label"
+//           role={undefined}
+//           variant="contained"
+//           tabIndex={-1}
+//           startIcon={<CloudUploadIcon />}
+//         >
+//           {language === "en" ? "Upload file" : "Завантажити файл"}
+//           <VisuallyHiddenInput
+//             type="file"
+//             onChange={handleFileChange}
+//             multiple
+//             accept=".jpg, .jpeg, .png"
+//           />
+//         </Button>
+
+//         <button onClick={handleUpload}>Upload</button>
+//  <button onClick={() => uploadTask.pause()}>pause</button>
+//         <button onClick={() => uploadTask.resume()}>resume</button>
+//         <button onClick={() => uploadTask.cancel()}>cancel</button>
+
+//       </div>
+//       <Box sx={{ position: "relative", display: "inline-flex" }}>
+//         <CircularProgress variant="determinate" value={loadingProgress} />
+//         <Box
+//           sx={{
+//             top: 0,
+//             left: 0,
+//             bottom: 0,
+//             right: 0,
+//             position: "absolute",
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "center",
+//           }}
+//         >
+//           <Typography variant="caption" component="div" color="text.secondary">
+//             {`${Math.round(loadingProgress)}%`}
+//           </Typography>
+//         </Box>
+//       </Box>
+//       {picturesArr.length > 0 &&
+//         picturesArr.map((imegeLink, index) => (
+//           <Box key={index}>
+//             <img src={imegeLink} style={{ width: "100%" }} />
+//           </Box>
+//         ))}

@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "../../redux/localOperation";
 import { useEffect } from "react";
+import { lessonsPlaces } from "../../locales/localesJill";
 
 SelectPlace.propTypes = {
   register: PropTypes.func,
@@ -51,8 +52,14 @@ export default function SelectPlace({
         value={valueSelect}
         onChange={(e) => setValueSelect(e.target.value)}
       >
-        <MenuItem value={"Zwanenhof"}>Zwanenhof</MenuItem>
-        <MenuItem value={"Maria Mediatrix"}>Maria Mediatrix</MenuItem>
+        {[
+          lessonsPlaces.zwanenhof.fullName,
+          lessonsPlaces.mariaMediatrix.fullName,
+        ].map((place, index) => (
+          <MenuItem key={index} value={place}>
+            {place}
+          </MenuItem>
+        ))}
       </Select>
       <FormHelperText sx={{ height: 30, ml: 0 }} error>
         {selectError}

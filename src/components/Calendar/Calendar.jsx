@@ -42,7 +42,7 @@ export default function Calendar({
   };
 
   const shouldDisplayBadge = ({ day }) => {
-    const dayOfMonth = dayjs(day.$d).format("DD.MM.YYYY");
+    const dayOfMonth = dayjs(day.$d).format("YYYY-MM-DD");
     return LessonsJillArr?.filter(({ date }) => dayOfMonth === date);
   };
 

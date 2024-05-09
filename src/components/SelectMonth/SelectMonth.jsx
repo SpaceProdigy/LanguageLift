@@ -30,7 +30,9 @@ export default function SelectMonth({ selectMonth, setSelectMonth }) {
           {monthArr(language).map((month, index) => (
             <MenuItem
               key={month}
-              value={`${index + 1}.${new Date().getFullYear()}`}
+              value={`${new Date().getFullYear()}-${
+                index + 1 < 10 ? `0${index + 1}` : index + 1
+              }`}
             >
               {month}
             </MenuItem>

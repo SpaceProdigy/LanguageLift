@@ -20,6 +20,7 @@ import ImageTitle from "../../components/ImageTitle/ImageTitle";
 import image from "../../pictures/pageSchedule/job.jpg";
 import ModalDelete from "./ModalDelete/ModalDelete";
 import ModalEddLesson from "./ModalEddLesson/ModalEddLesson";
+import { lessonsPlaces } from "../../locales/localesJill";
 
 const Schedule = () => {
   const language = useSelector(selectLanguage);
@@ -31,11 +32,14 @@ const Schedule = () => {
 
   const [isDay, setIsDay] = useState(null);
   const [valueTime, setValueTime] = useState("");
-  const [valueSelect, setValueSelect] = useState("Zwanenhof");
+  const [valueSelect, setValueSelect] = useState(
+    lessonsPlaces.defaultPlace.fullName
+  );
   const [errorTime, setErrorTime] = useState(false);
   const [selectMonth, setSelectMonth] = useState(
-    `${new Date().getMonth() + 1}.${new Date().getFullYear()}`
+    `${dayjs(new Date()).format("YYYY-MM")}`
   );
+  console.log(selectMonth);
   const [permission, setPermission] = useState(false);
   const [errorDate, setErrorDate] = useState(false);
   const [openModalPassword, setOpenModalPassword] = useState(false);
@@ -99,7 +103,6 @@ const Schedule = () => {
     }
 
     if (isEdit.edit) {
-      console.log(isEdit?.data[isChooseALesson ?? 0]?.id);
       dispatch(
         updateScheduleByIdThunk({
           nameCollection: collectionDb.lessonsWithJillSchedule,
@@ -108,10 +111,10 @@ const Schedule = () => {
             id: isEdit?.data[isChooseALesson ?? 0]?.id,
             location: valueSelect,
             time: [
-              dayjs(valueTime[0]).format("DD.MM.YYYYTHH:mm"),
-              dayjs(valueTime[1]).format("DD.MM.YYYYTHH:mm"),
+              dayjs(valueTime[0]).format("YYYY-MM-DDTHH:mm"),
+              dayjs(valueTime[1]).format("YYYY-MM-DDTHH:mm"),
             ],
-            lastUpdated: dayjs(new Date()).format("DD.MM.YYYYTHH:mm:ss"),
+            lastUpdated: dayjs(new Date()).format("YYYY-MM-DDTHH:mm:ss"),
           },
         })
       );
@@ -155,7 +158,11 @@ const Schedule = () => {
         <ImageTitle
           image={image}
           // tipingText={lesson && lesson?.date && lesson.date}
-          title={language === "en" ? "Schedule of lessons" : "Розклад уроків"}
+          title={
+            language === "en"
+              ? "Schedule of lessons with Jill"
+              : "Розклад уроків з Джилл"
+          }
         />
         <Box
           display="flex"
