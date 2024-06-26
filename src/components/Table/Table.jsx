@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { selectLanguage } from "../../redux/localOperation";
 import {
   selectLessonsJillArr,
-  selectLessonsJillLoading,
+  selectLessonsLoading,
 } from "../../redux/englishLessonsSlice";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -31,8 +31,8 @@ import { lessonsPlaces } from "../../locales/localesJill";
 BasicTable.propTypes = {
   isDeleteModal: PropTypes.bool,
   setIsDeleteModal: PropTypes.func,
-  permission: PropTypes.bool.isRequired,
-  selectMonth: PropTypes.string.isRequired,
+  permissions: PropTypes.bool.isRequired,
+  selectMonthCalendar: PropTypes.object.isRequired,
   setIsEdit: PropTypes.func,
   handleAddALesson: PropTypes.func,
   setIsChooseALesson: PropTypes.func,
@@ -42,28 +42,25 @@ BasicTable.propTypes = {
     PropTypes.number,
     PropTypes.oneOf([null]),
   ]),
+  pathNavigate: PropTypes.string.isRequired,
 };
 
 export default function BasicTable({
   setIsDeleteModal,
   setIsEdit,
-  permission,
-  selectMonth,
+  permissions,
   handleAddALesson,
   setIsChooseALesson,
   setValueSelect,
+  pathNavigate,
 }) {
   const language = useSelector(selectLanguage);
   const LessonsJillArr = useSelector(selectLessonsJillArr);
-  const isLoading = useSelector(selectLessonsJillLoading);
+  const isLoading = useSelector(selectLessonsLoading);
   const screenWidthBigger600 = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
 
-  const currenMonthArr = LessonsJillArr.filter(({ date }) => {
-    return dayjs(date).format("YYYY-MM") === selectMonth;
-  });
-
-  const sortArr = currenMonthArr.sort((a, b) => {
+  const sortArr = [...LessonsJillArr]?.sort((a, b) => {
     const dateA = new Date(a.time[0]);
     const dateB = new Date(b.time[0]);
 
@@ -91,7 +88,7 @@ export default function BasicTable({
             <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
               {language === "en" ? "To the lesson" : "До уроку"}
             </TableCell>
-            {permission && (
+            {permissions && (
               <>
                 <TableCell align="center">
                   {language === "en" ? "Edit" : "Редагувати"}
@@ -134,15 +131,15 @@ export default function BasicTable({
                     onClick={() => {
                       setIsChooseALesson(index);
                       setIsEdit({ edit: false, data: item });
-                      navigate(`/schedule-of-lessons-with-jill/${id}`, {
-                        state: id,
+                      navigate(`${pathNavigate}/${id}`, {
+                        state: item[index],
                       });
                     }}
                   >
                     <DirectionsWalkIcon />
                   </IconButton>
                 </TableCell>
-                {permission && (
+                {permissions && (
                   <>
                     <TableCell align="center">
                       <IconButton

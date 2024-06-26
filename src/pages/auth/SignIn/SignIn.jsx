@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
+  Box,
   Button,
   FormControl,
   FormHelperText,
@@ -13,12 +14,28 @@ import {
 import { FormWrapper } from "./SignIn.styled";
 import { useEffect, useState } from "react";
 import { loginSchema } from "../../../shemas/authShema";
+import { useDispatch, useSelector } from "react-redux";
+import { loginThunk } from "../../../redux/authOparations";
+import { AlertComponent } from "../../../components/AlertComponent/AlertComponent";
+import { selectLanguage } from "../../../redux/localOperation";
+import { NavLink, useNavigate } from "react-router-dom";
+import { selectAuthentificated } from "../../../redux/authSlice";
 
 const SignIn = () => {
   const [actualStateInputs, setActualStateInputs] = useState(
     JSON.parse(localStorage.getItem("signin")) &&
       JSON.parse(localStorage.getItem("signin"))
   );
+
+  const language = useSelector(selectLanguage);
+  const dispatch = useDispatch();
+  const authentificated = useSelector(selectAuthentificated);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (authentificated) {
+      navigate("/");
+    }
+  }, [authentificated, navigate]);
 
   const {
     register,
@@ -31,8 +48,8 @@ const SignIn = () => {
     defaultValues: actualStateInputs && actualStateInputs,
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    await dispatch(loginThunk(data));
     reset();
     setActualStateInputs();
     localStorage.removeItem("signin");
@@ -48,41 +65,78 @@ const SignIn = () => {
     <>
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h5" sx={{ mb: 3 }}>
-          Sing in
+          {language === "en" ? "Sign in" : "Увійти"}
         </Typography>
         <FormControl variant="outlined" fullWidth>
-          <InputLabel variant="outlined">Login</InputLabel>
+          <InputLabel variant="outlined">
+            {language === "en" ? "Email" : "Електронна пошта"}
+          </InputLabel>
           <OutlinedInput
-            label="Login"
-            placeholder="Enter your login or email"
+            label={language === "en" ? "Email" : "Електронна пошта"}
+            placeholder={
+              language === "en"
+                ? "Enter your email"
+                : "Введіть свою електронну адресу"
+            }
             onInput={(e) =>
               setActualStateInputs((prevState) => {
-                return { ...prevState, login: e.target.value };
+                return { ...prevState, email: e.target.value };
               })
             }
-            {...register("login")}
+            {...register("email")}
           />
-          <FormHelperText sx={{ minHeight: 40 }} error>
-            {errors.login?.message}
+          <FormHelperText sx={{ minHeight: 50 }} error>
+            {errors.email?.message[language]}
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" fullWidth>
-          <InputLabel variant="outlined">Password</InputLabel>
+          <InputLabel variant="outlined">
+            {language === "en" ? "Password" : "Пароль"}
+          </InputLabel>
           <OutlinedInput
-            label="Password"
+            label={language === "en" ? "Password" : "Пароль"}
             type="password"
-            placeholder="Enter your password"
+            placeholder={
+              language === "en" ? "Enter your password" : "Введіть ваш пароль"
+            }
             {...register("password")}
           />
 
           <FormHelperText sx={{ minHeight: 40 }} error>
-            {errors.password?.message}
+            {errors.password?.message[language]}
           </FormHelperText>
         </FormControl>
         <Button type="submit" variant="contained" fullWidth size="large">
-          Submit
+          {language === "en" ? "Submit" : "Надіслати"}
         </Button>
       </FormWrapper>
+      <Box m={1} textAlign="center">
+        {language === "en" ? (
+          <Typography variant="caption">
+            I don&apos;t have an account.
+            <NavLink to={"/signup"} style={{ textDecoration: "none" }}>
+              <Typography component="span" variant="caption" color="#3498db">
+                {" "}
+                Sign up
+              </Typography>
+            </NavLink>
+            .
+          </Typography>
+        ) : (
+          <Typography variant="caption">
+            У мене немає облікового запису.
+            <NavLink to={"/signup"} style={{ textDecoration: "none" }}>
+              {" "}
+              <Typography component="span" variant="caption" color="#3498db">
+                {" "}
+                Зареєструватися
+              </Typography>
+            </NavLink>
+            .
+          </Typography>
+        )}
+      </Box>
+      <AlertComponent />
     </>
   );
 };

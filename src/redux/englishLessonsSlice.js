@@ -5,13 +5,16 @@ import {
   deleteScheduleByIdThunk,
   addScheduleThunk,
   updateScheduleByIdThunk,
+  uploadMaterialsThunk,
+  deleteFileByNameThunk,
+  addCommentByIdThunk,
 } from "./englishLessonsOperations";
 
 const lessonsJillState = {
   isLoading: false,
   error: null,
-  lessonsJillArr: [],
-  lessonJillById: {},
+  lessonsArr: [],
+  lessonById: {},
 };
 
 const handlePending = (state) => {
@@ -24,8 +27,8 @@ const handleRejected = (state, action) => {
   state.error = action.payload;
 };
 
-const lessonJillSlice = createSlice({
-  name: "lessonsJill",
+const lessonSlice = createSlice({
+  name: "lessons",
   initialState: lessonsJillState,
   extraReducers: (builder) =>
     builder
@@ -34,7 +37,7 @@ const lessonJillSlice = createSlice({
       .addCase(getScheduleThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.lessonsJillArr = action.payload;
+        state.lessonsArr = action.payload;
       })
 
       .addCase(getScheduleByIdThunk.pending, handlePending)
@@ -42,7 +45,7 @@ const lessonJillSlice = createSlice({
       .addCase(getScheduleByIdThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.lessonJillById = action.payload;
+        state.lessonById = action.payload;
       })
 
       .addCase(deleteScheduleByIdThunk.pending, handlePending)
@@ -50,10 +53,10 @@ const lessonJillSlice = createSlice({
       .addCase(deleteScheduleByIdThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const updatedArr = state.lessonsJillArr.filter(
+        const updatedArr = state.lessonsArr.filter(
           ({ id }) => id !== action.payload
         );
-        state.lessonsJillArr = updatedArr;
+        state.lessonsArr = updatedArr;
       })
       .addCase(addScheduleThunk.pending, handlePending)
       .addCase(addScheduleThunk.rejected, handleRejected)
@@ -61,7 +64,7 @@ const lessonJillSlice = createSlice({
         state.isLoading = false;
         state.error = null;
 
-        state.lessonsJillArr.push(action.payload);
+        state.lessonsArr.push(action.payload);
       })
       .addCase(updateScheduleByIdThunk.pending, handlePending)
       .addCase(updateScheduleByIdThunk.rejected, handleRejected)
@@ -69,22 +72,48 @@ const lessonJillSlice = createSlice({
         state.isLoading = false;
         state.error = null;
 
-        const index = state.lessonsJillArr.findIndex(
+        const index = state.lessonsArr.findIndex(
           ({ id }) => id === action.payload.id
         );
 
         if (index !== -1) {
-          const currentElement = state.lessonsJillArr[index];
+          const currentElement = state.lessonsArr[index];
           const updateElement = { ...currentElement, ...action.payload };
-          console.log(updateElement);
-          state.lessonsJillArr.splice(index, 1, updateElement);
+
+          state.lessonsArr.splice(index, 1, updateElement);
         }
+      })
+      // UPLOAD FILES
+      .addCase(uploadMaterialsThunk.pending, handlePending)
+      .addCase(uploadMaterialsThunk.rejected, handleRejected)
+      .addCase(uploadMaterialsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+
+        state.lessonById = { ...state.lessonById, ...action.payload };
+      })
+      // DELETE FILES
+      .addCase(deleteFileByNameThunk.pending, handlePending)
+      .addCase(deleteFileByNameThunk.rejected, handleRejected)
+      .addCase(deleteFileByNameThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.lessonById = { ...state.lessonById, ...action.payload };
+      })
+
+      // ADD COMMENT
+
+      .addCase(addCommentByIdThunk.pending, handlePending)
+      .addCase(addCommentByIdThunk.rejected, handleRejected)
+      .addCase(addCommentByIdThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.lessonById = { ...state.lessonById, ...action.payload };
       }),
 });
 
-export const lessonsJillReducer = lessonJillSlice.reducer;
-export const selectLessonsJillLoading = (state) => state.lessonsJill.isLoading;
-export const selectLessonsJillArr = (state) => state.lessonsJill.lessonsJillArr;
-export const selectLessonsJillById = (state) =>
-  state.lessonsJill.lessonJillById;
-export const selectLessonsJillError = (state) => state.lessonsJill.error;
+export const lessonsJillReducer = lessonSlice.reducer;
+export const selectLessonsLoading = (state) => state.lessons.isLoading;
+export const selectLessonsJillArr = (state) => state.lessons.lessonsArr;
+export const selectLessonsById = (state) => state.lessons.lessonById;
+export const selectLessonsJillError = (state) => state.lessons.error;

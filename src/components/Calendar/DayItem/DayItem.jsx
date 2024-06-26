@@ -4,7 +4,13 @@ import SchoolIcon from "@mui/icons-material/School";
 import PropTypes from "prop-types";
 import { nanoid } from "@reduxjs/toolkit";
 
-export const DayItem = ({ setIsModal, setIsEdit, shouldDisplay, props }) => {
+export const DayItem = ({
+  permissions,
+  setIsModal,
+  setIsEdit,
+  shouldDisplay,
+  props,
+}) => {
   const theme = useTheme();
   const sortArr = shouldDisplay.sort((a, b) => {
     const dateA = new Date(a.time[0]);
@@ -12,6 +18,21 @@ export const DayItem = ({ setIsModal, setIsEdit, shouldDisplay, props }) => {
 
     return dateB - dateA;
   });
+
+  const hendleOpenMenu = () => {
+    console.log(shouldDisplay);
+    if (!permissions && !shouldDisplay) {
+      return;
+    }
+    if (!permissions && shouldDisplay.length === 0) {
+      return;
+    }
+
+    setIsModal(true);
+
+    setIsEdit({ edit: false, data: shouldDisplay });
+  };
+
   return (
     <Box>
       <Box position="relative">
@@ -87,10 +108,7 @@ export const DayItem = ({ setIsModal, setIsEdit, shouldDisplay, props }) => {
           placement="top-end"
         >
           <PickersDay
-            onClick={() => {
-              setIsModal(true);
-              setIsEdit({ edit: false, data: shouldDisplay });
-            }}
+            onClick={hendleOpenMenu}
             {...props}
             sx={{
               border: props.today
@@ -111,4 +129,6 @@ DayItem.propTypes = {
   setIsModal: PropTypes.func,
   setIsEdit: PropTypes.func,
   shouldDisplay: PropTypes.array,
+  permissions: PropTypes.bool.isRequired,
+  isEdit: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };

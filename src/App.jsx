@@ -1,73 +1,85 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
-import { Container, CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Loader } from "./components/Loader/Loader";
 import { HeaderBar } from "./components/AppBar/AppBar.jsx";
 import { ScrollToTopButton } from "./components/ScrollToTopButton/ScrollToTopButton.jsx";
 import { Footer } from "./components/Footer/Footer.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectTheme } from "./redux/localOperation.js";
 import mainTheme from "./styles/theme.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebaseConfig.js";
+import { currentUserThunk } from "./redux/authOparations.js";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx";
+import { MainConteiner, MainDiv } from "./App.styled.jsx";
+import { pathPages } from "./locales/pathPages.js";
+import JillSchedule from "./routs/Jill/JillSchedule.jsx";
+import { selectAuthentificated } from "./redux/authSlice.js";
+import JillLessonMaterials from "./routs/Jill/JillLessonMaterials.jsx";
 
 // ROUTS
 const Home = lazy(() => import("./pages/Home/Home.jsx"));
-const EnglishforEveryone = lazy(() =>
-  import("./pages/download/EnglishforEveryone/EnglishforEveryone.jsx")
-);
 const NotFound = lazy(() => import("./pages/NotFound/NotFound.jsx"));
 const SignIn = lazy(() => import("./pages/auth/SignIn/SignIn.jsx"));
 const SignUp = lazy(() => import("./pages/auth/SignUp/SignUp.jsx"));
-const Schedule = lazy(() => import("./pages/Schedule/Schedule.jsx"));
-const MaterialfromJill = lazy(() =>
-  import("./pages/MaterialLessons/MaterialFromJill/MaterialfromJill.jsx")
-);
+
+const Account = lazy(() => import("./pages/Account/Account.jsx"));
+
+const Books = lazy(() => import("./pages/Books/Books.jsx"));
 
 function App() {
   const mode = useSelector(selectTheme);
+  const authentificated = useSelector(selectAuthentificated);
+  const dispatch = useDispatch();
+
+  useEffect(
+    () => onAuthStateChanged(auth, (user) => dispatch(currentUserThunk(user))),
+
+    [dispatch, authentificated]
+  );
 
   return (
     <ThemeProvider theme={mainTheme(mode)}>
       <CssBaseline enableColorScheme={true}>
-        <div
-          style={{
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
+        <MainDiv>
           <HeaderBar />
 
           <main style={{ flex: 1, width: "100%" }}>
-            <Container>
+            <MainConteiner>
               <Suspense fallback={<Loader />}>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path={`${pathPages.books}`} element={<Books />} />
                   <Route
-                    path="/english-for-everyone"
-                    element={<EnglishforEveryone />}
+                    path={`${pathPages.lessonsWithJill}`}
+                    element={<JillSchedule />}
                   />
                   <Route
-                    path="/schedule-of-lessons-with-jill"
-                    element={<Schedule />}
+                    path={`${pathPages.lessonsWithJill}/:id`}
+                    element={<JillLessonMaterials />}
                   />
+                  <Route path={`${pathPages.signIn}`} element={<SignIn />} />
+                  <Route path={`${pathPages.signUp}`} element={<SignUp />} />
                   <Route
-                    path="/schedule-of-lessons-with-jill/:id"
-                    element={<MaterialfromJill />}
+                    path={`${pathPages.account}`}
+                    element={
+                      <PrivateRoute>
+                        <Account />
+                      </PrivateRoute>
+                    }
                   />
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/signup" element={<SignUp />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Outlet />
               </Suspense>
               <ScrollToTopButton />
-            </Container>
+            </MainConteiner>
           </main>
           <footer style={{ flexShrink: 0, width: "100%", maxWidth: 2048 }}>
             <Footer />
           </footer>
-        </div>
+        </MainDiv>
       </CssBaseline>
     </ThemeProvider>
   );

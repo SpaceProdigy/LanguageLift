@@ -1,3 +1,5 @@
+import { pathPages } from "./pathPages";
+
 export const buttonText = [
   {
     text: {
@@ -8,17 +10,10 @@ export const buttonText = [
   },
   {
     text: {
-      en: "English for Everyone",
-      ua: "Англійська для всіх",
+      en: "Books",
+      ua: "Книги",
     },
-    path: "/english-for-everyone",
-  },
-  {
-    text: {
-      en: "Schedule of lessons with Jill",
-      ua: "Розклад уроків з Джилл",
-    },
-    path: "/schedule-of-lessons-with-jill",
+    path: "/books",
   },
 ];
 
@@ -36,5 +31,15 @@ export const buttonAuthText = [
       ua: "Увійти",
     },
     path: "/signin",
+  },
+];
+
+export const buttonScheduleText = [
+  {
+    text: {
+      en: "English with Jill",
+      ua: "Англійська з Джил",
+    },
+    path: `${pathPages.lessonsWithJill}`,
   },
 ];

@@ -1,22 +1,4 @@
-import {
-  Box,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  useTheme,
-} from "@mui/material";
-
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import LoginIcon from "@mui/icons-material/Login";
-import HomeIcon from "@mui/icons-material/Home";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { StyledNavLink } from "./DrawerMenu.styled";
-import { buttonAuthText, buttonText } from "../../locales/drawerMenu";
+import { Box, Divider, Drawer, useTheme } from "@mui/material";
 
 import { useLocation } from "react-router-dom";
 import {
@@ -25,17 +7,24 @@ import {
   setAppBarDrawer,
 } from "../../redux/localOperation";
 import { useDispatch, useSelector } from "react-redux";
+import { selectAuthentificated } from "../../redux/authSlice";
+import { logOutThunk } from "../../redux/authOparations";
+import ScheduleList from "./ScheduleList/ScheduleList";
+import MainList from "./MainList/MainList";
+import AuthList from "./AuthList/AuthList";
 
 export default function DrawerMenu() {
   const { pathname } = useLocation();
   const language = useSelector(selectLanguage);
   const appDruwerBar = useSelector(selectAppBarDrawer);
-
+  const isAuthentificated = useSelector(selectAuthentificated);
   const dispatch = useDispatch();
 
   const toggleDrawer = (value) => {
     dispatch(setAppBarDrawer(value));
   };
+
+  const hendleLogOut = () => dispatch(logOutThunk());
 
   const theme = useTheme();
 
@@ -43,52 +32,27 @@ export default function DrawerMenu() {
     <Box
       sx={{ width: 250, height: "100%" }}
       role="presentation"
-      onClick={() => toggleDrawer(false)}
+      onClick={(e) => {
+        if (e.target.closest("#link")) {
+          toggleDrawer(false);
+        }
+        if (e.target.closest("#according")?.id) {
+          return;
+        }
+        toggleDrawer(false);
+      }}
     >
-      <List>
-        {buttonText.map(({ text, path }, index) => (
-          <ListItem key={index} disablePadding>
-            <StyledNavLink to={path} state={pathname}>
-              <ListItemButton
-                sx={{
-                  background:
-                    pathname === path && theme.palette.action.selected,
-                }}
-              >
-                <ListItemIcon>
-                  {path === "/" && <HomeIcon />}
-                  {path === "/english-for-everyone" && <LibraryBooksIcon />}
-                  {path === "/schedule-of-lessons-with-jill" && (
-                    <CalendarMonthIcon />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text[language]} />
-              </ListItemButton>
-            </StyledNavLink>
-          </ListItem>
-        ))}
-      </List>
+      <MainList pathname={pathname} language={language} theme={theme} />
+      <ScheduleList pathname={pathname} language={language} theme={theme} />
+
       <Divider />
-      <List>
-        {buttonAuthText.map(({ text, path }, index) => (
-          <ListItem key={index} disablePadding>
-            <StyledNavLink to={path}>
-              <ListItemButton
-                sx={{
-                  background:
-                    pathname === path && theme.palette.action.selected,
-                }}
-              >
-                <ListItemIcon>
-                  {path === "/signup" && <AppRegistrationIcon />}
-                  {path === "/signin" && <LoginIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text[language]} />
-              </ListItemButton>
-            </StyledNavLink>
-          </ListItem>
-        ))}
-      </List>
+      <AuthList
+        pathname={pathname}
+        language={language}
+        theme={theme}
+        isAuthentificated={isAuthentificated}
+        hendleLogOut={hendleLogOut}
+      />
     </Box>
   );
 

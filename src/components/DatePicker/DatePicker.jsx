@@ -36,8 +36,6 @@ export default function BasicDatePicker({
   const datePattern = /^\d{4}-\d{2}-\d{2}$/;
   const yearsIsCorrect = datePattern.test(isDate);
 
-  console.log("isDate", isDate);
-
   useEffect(() => {
     setValueDate(isDate);
   }, [isDate, setValueDate]);

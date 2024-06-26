@@ -42,7 +42,7 @@ export default function TimeField({
 }) {
   const language = useSelector(selectLanguage);
   const LessonsJillArr = useSelector(selectLessonsJillArr);
-  console.log(dayjs("2025-05-20T17:00"));
+
   const addInitialTime = () => {
     if (isEdit?.edit) {
       const timeArr = isEdit?.data?.[isChooseALesson ?? 0]?.time;

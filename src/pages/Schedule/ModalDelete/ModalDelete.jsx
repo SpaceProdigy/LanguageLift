@@ -81,7 +81,7 @@ export default function ModalDelete({
               onClick={() => {
                 dispatch(
                   deleteScheduleByIdThunk({
-                    nameCollection: collectionDb.lessonsWithJillSchedule,
+                    nameCollection: collectionDb.lessonsWithJill,
                     id: isEdit?.data[isChooseALesson ?? 0]?.id,
                   })
                 );

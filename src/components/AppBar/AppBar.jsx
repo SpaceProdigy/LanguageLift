@@ -1,16 +1,28 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ThemeButton } from "./ThemeButton/ThemeButton";
 import DrawerMenu from "../DrawerMenu/DrawerMenu";
-import icon from "/src/pictures/appBar/eng256x256.png";
+import icon from "/src/pictures/appBar/study256x256.png";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LanguageButton } from "./LanguageButton/LanguageButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAppBarDrawer } from "../../redux/localOperation";
+import { selectAuthentificated } from "../../redux/authSlice";
+import { Avatar } from "./Avatar/Avatar";
 
 export const HeaderBar = () => {
   const dispatch = useDispatch();
+  const width420 = useMediaQuery("(min-width:420px)");
+  const authentificated = useSelector(selectAuthentificated);
+
   return (
     <Box sx={{ width: "100%", maxWidth: 2048 }}>
       <AppBar position="static">
@@ -39,13 +51,30 @@ export const HeaderBar = () => {
               <motion.div whileTap={{ scale: 0.95 }}>
                 <Box style={{ display: "flex", alignItems: "center", gap: 5 }}>
                   <img src={icon} width={30} />
-                  <Typography
-                    variant="subtitle1"
-                    component="h6"
-                    sx={{ flexGrow: 1 }}
-                  >
-                    Language lift
-                  </Typography>
+
+                  {width420 && (
+                    <Typography
+                      variant="subtitle1"
+                      component="h6"
+                      sx={{ flexGrow: 1 }}
+                    >
+                      Study
+                      <Typography
+                        variant="subtitle1"
+                        component="span"
+                        sx={(theme) => ({
+                          bgcolor: "#f90",
+                          padding: "5px",
+                          borderRadius: 2,
+
+                          color:
+                            theme.palette.mode === "dark" ? "#111" : "#fff",
+                        })}
+                      >
+                        Hub
+                      </Typography>
+                    </Typography>
+                  )}
                 </Box>
               </motion.div>
             </NavLink>
@@ -54,6 +83,11 @@ export const HeaderBar = () => {
             <LanguageButton />
             <DrawerMenu />
             <ThemeButton />
+            {authentificated && (
+              <NavLink to="account">
+                <Avatar />
+              </NavLink>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

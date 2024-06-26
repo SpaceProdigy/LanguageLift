@@ -1,3 +1,4 @@
 export const collectionDb = {
-  lessonsWithJillSchedule: "lessonsWithJillSchedule",
+  lessonsWithJill: "lessonsWithJill",
+  admins: "admins",
 };

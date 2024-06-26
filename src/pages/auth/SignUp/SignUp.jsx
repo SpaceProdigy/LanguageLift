@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
+  Box,
   Button,
   FormControl,
   FormHelperText,
@@ -10,15 +11,32 @@ import {
   Typography,
 } from "@mui/material";
 
-import { singUpSchema } from "../../../shemas/authShema";
+import { signUpSchema } from "../../../shemas/authShema";
 import { useEffect, useState } from "react";
 import { FormWrapper } from "./SignUp.styled";
+import { registerThunk } from "../../../redux/authOparations";
+import { useDispatch, useSelector } from "react-redux";
+import { AlertComponent } from "../../../components/AlertComponent/AlertComponent";
+import { selectLanguage } from "../../../redux/localOperation";
+import { NavLink, useNavigate } from "react-router-dom";
+import { selectAuthentificated } from "../../../redux/authSlice";
 
 const SignUp = () => {
   const [actualStateInputs, setActualStateInputs] = useState(
     JSON.parse(localStorage.getItem("signup")) &&
       JSON.parse(localStorage.getItem("signup"))
   );
+  const language = useSelector(selectLanguage);
+
+  const dispatch = useDispatch();
+  const authentificated = useSelector(selectAuthentificated);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (authentificated) {
+      navigate("/");
+    }
+  }, [authentificated, navigate]);
 
   const {
     register,
@@ -26,15 +44,16 @@ const SignUp = () => {
     formState: { errors },
     reset,
   } = useForm({
-    resolver: yupResolver(singUpSchema),
+    resolver: yupResolver(signUpSchema),
     mode: "onBlur",
     defaultValues: actualStateInputs ?? { login: "", email: "", password: "" },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    await dispatch(registerThunk(data));
+
     reset();
-    setActualStateInputs();
+    setActualStateInputs(null);
     localStorage.removeItem("signup");
   };
 
@@ -48,13 +67,19 @@ const SignUp = () => {
     <>
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h5" sx={{ mb: 3 }}>
-          Sing up
+          {language === "en" ? "Sign up" : "Зареєструватися"}
         </Typography>
         <FormControl variant="outlined" fullWidth>
-          <InputLabel variant="outlined">Login</InputLabel>
+          <InputLabel variant="outlined">
+            {language === "en" ? "Login" : "Логін"}
+          </InputLabel>
           <OutlinedInput
-            label="Login"
-            placeholder="Enter your login or email"
+            label={language === "en" ? "Login" : "Логін"}
+            placeholder={
+              language === "en"
+                ? "Enter your login or email"
+                : "Введіть свій логін або email"
+            }
             onInput={(e) =>
               setActualStateInputs((prevState) => {
                 return { ...prevState, login: e.target.value };
@@ -62,16 +87,23 @@ const SignUp = () => {
             }
             {...register("login")}
           />
-          <FormHelperText sx={{ minHeight: 40 }} error>
-            {errors.login?.message}
+          <FormHelperText sx={{ minHeight: 50 }} error>
+            {errors.login?.message[language]}
           </FormHelperText>
         </FormControl>
+
         <FormControl variant="outlined" fullWidth>
-          <InputLabel variant="outlined">Email</InputLabel>
+          <InputLabel variant="outlined">
+            {language === "en" ? "Email" : "Електронна пошта"}
+          </InputLabel>
           <OutlinedInput
-            label="Email"
+            label={language === "en" ? "Email" : "Електронна пошта"}
             type="email"
-            placeholder="Enter your password"
+            placeholder={
+              language === "en"
+                ? "Enter your email"
+                : "Введіть свою електронну адресу"
+            }
             onInput={(e) =>
               setActualStateInputs((prevState) => {
                 return { ...prevState, email: e.target.value };
@@ -80,27 +112,60 @@ const SignUp = () => {
             {...register("email")}
           />
 
-          <FormHelperText sx={{ minHeight: 40 }} error>
-            {errors.email?.message}
+          <FormHelperText sx={{ minHeight: 50 }} error>
+            {errors.email?.message[language]}
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" fullWidth>
-          <InputLabel variant="outlined">Password</InputLabel>
+          <InputLabel variant="outlined">
+            {language === "en" ? "Password" : "Пароль"}
+          </InputLabel>
           <OutlinedInput
-            label="Password"
+            label={language === "en" ? "Password" : "Пароль"}
             type="password"
-            placeholder="Enter your password"
+            placeholder={
+              language === "en" ? "Enter your password" : "Введіть ваш пароль"
+            }
             {...register("password")}
           />
 
           <FormHelperText sx={{ minHeight: 40 }} error>
-            {errors.password?.message}
+            {errors.password?.message[language]}
           </FormHelperText>
         </FormControl>
         <Button type="submit" variant="contained" fullWidth size="large">
-          Submit
+          {language === "en" ? "Submit" : "Надіслати"}
         </Button>
+
+        <Box m={1} textAlign="center">
+          {language === "en" ? (
+            <Typography variant="caption">
+              Already registered to{" "}
+              <NavLink to={"/signin"} style={{ textDecoration: "none" }}>
+                {" "}
+                <Typography component="span" variant="caption" color="#3498db">
+                  {" "}
+                  sign in
+                </Typography>
+              </NavLink>
+              .
+            </Typography>
+          ) : (
+            <Typography variant="caption">
+              Вже зареєстрований
+              <NavLink to={"/signin"} style={{ textDecoration: "none" }}>
+                {" "}
+                <Typography component="span" variant="caption" color="#3498db">
+                  {" "}
+                  увійти{" "}
+                </Typography>
+              </NavLink>
+              в обліковий запис.
+            </Typography>
+          )}
+        </Box>
       </FormWrapper>
+      <AlertComponent />
     </>
   );
 };

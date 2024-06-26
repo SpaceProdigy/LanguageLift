@@ -8,14 +8,18 @@ import { monthArr } from "./month.js";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "../../redux/localOperation.js";
+import dayjs from "dayjs";
 SelectMonth.propTypes = {
-  setSelectMonth: PropTypes.func,
-  selectMonth: PropTypes.string,
+  setSelectMonthCalendar: PropTypes.func,
+  selectMonthCalendar: PropTypes.object,
 };
 
-export default function SelectMonth({ selectMonth, setSelectMonth }) {
+export default function SelectMonth({
+  setSelectMonthCalendar,
+  selectMonthCalendar,
+}) {
   const language = useSelector(selectLanguage);
-
+  // console.log();
   return (
     <Box sx={{ maxWidth: 400, width: "100%" }}>
       <FormControl fullWidth>
@@ -23,9 +27,13 @@ export default function SelectMonth({ selectMonth, setSelectMonth }) {
           {language === "en" ? "Select a month" : "Виберіть місяць"}
         </InputLabel>
         <Select
-          value={selectMonth}
+          value={dayjs(selectMonthCalendar).format("YYYY-MM")}
           label={language === "en" ? "Select a month" : "Виберіть місяць"}
-          onChange={(e) => setSelectMonth(e.target.value)}
+          onChange={(e) => {
+            console.log(e.target.value);
+
+            setSelectMonthCalendar(dayjs(e.target.value));
+          }}
         >
           {monthArr(language).map((month, index) => (
             <MenuItem

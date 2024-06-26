@@ -15,8 +15,21 @@ const Home = () => {
         <Hero></Hero>
 
         <WrapperTitel>
-          <Typography textAlign="center" variant="h4">
-            Language lift
+          <Typography textAlign="center" variant="h4" sx={{ fontWeight: 700 }}>
+            Study
+            <Typography
+              variant="h4"
+              component="span"
+              sx={(theme) => ({
+                bgcolor: "#f90",
+                padding: "5px",
+                borderRadius: 2,
+                fontWeight: 700,
+                color: theme.palette.mode === "dark" ? "#111" : "#fff",
+              })}
+            >
+              Hub
+            </Typography>
           </Typography>
           <Typography variant="body2" textAlign="center" marginTop={1}>
             <ReactTyped

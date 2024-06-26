@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { selectLanguage } from "../../redux/localOperation";
 import {
   selectLessonsJillArr,
-  selectLessonsJillLoading,
+  selectLessonsLoading,
 } from "../../redux/englishLessonsSlice";
 import dayjs from "dayjs";
 
@@ -27,13 +27,16 @@ export default function Calendar({
   isChooseALesson,
   isDay,
   setValueSelect,
-  permission,
+  permissions,
   isDeleteModal,
   setIsDeleteModal,
+  pathNavigate,
+  setSelectMonthCalendar,
+  selectMonthCalendar,
 }) {
   const [isModal, setIsModal] = useState(false);
   const language = useSelector(selectLanguage);
-  const isLoading = useSelector(selectLessonsJillLoading);
+  const isLoading = useSelector(selectLessonsLoading);
   const LessonsJillArr = useSelector(selectLessonsJillArr);
 
   const handleClose = () => {
@@ -66,6 +69,8 @@ export default function Calendar({
           adapterLocale={language === "ua" ? "uk" : "en"}
         >
           <DateCalendar
+            value={selectMonthCalendar}
+            onMonthChange={(e) => setSelectMonthCalendar(e)}
             onChange={(e) => setIsDay(e)}
             key={language}
             sx={{
@@ -81,6 +86,8 @@ export default function Calendar({
                 // console.log(shouldDisplay);
                 return (
                   <DayItem
+                    permissions={permissions}
+                    isEdit={isEdit}
                     setIsModal={setIsModal}
                     setIsEdit={setIsEdit}
                     shouldDisplay={shouldDisplay}
@@ -94,6 +101,7 @@ export default function Calendar({
         <AnimatePresence>
           {isModal && (
             <ModalCalendar
+              pathNavigate={pathNavigate}
               open={open}
               isEdit={isEdit}
               setIsEdit={setIsEdit}
@@ -104,7 +112,7 @@ export default function Calendar({
               isChooseALesson={isChooseALesson}
               isDay={isDay}
               setValueSelect={setValueSelect}
-              permission={permission}
+              permissions={permissions}
               isDeleteModal={isDeleteModal}
               setIsDeleteModal={setIsDeleteModal}
             />
@@ -129,7 +137,10 @@ Calendar.propTypes = {
     PropTypes.oneOf([null]),
   ]),
   setValueSelect: PropTypes.func,
-  permission: PropTypes.bool,
+  permissions: PropTypes.bool,
   isDeleteModal: PropTypes.bool,
   setIsDeleteModal: PropTypes.func,
+  pathNavigate: PropTypes.string.isRequired,
+  selectMonthCalendar: PropTypes.object,
+  setSelectMonthCalendar: PropTypes.func.isRequired,
 };

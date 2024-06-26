@@ -2,7 +2,6 @@ import { Box, Paper, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import BasicTable from "../../components/Table/Table";
-
 import { Password } from "../../components/Password/Password";
 import { AlertComponent } from "../../components/AlertComponent/AlertComponent";
 import SelectMonth from "../../components/SelectMonth/SelectMonth";
@@ -13,7 +12,7 @@ import {
   getScheduleThunk,
   updateScheduleByIdThunk,
 } from "../../redux/englishLessonsOperations";
-import { selectLessonsJillLoading } from "../../redux/englishLessonsSlice";
+import { selectLessonsLoading } from "../../redux/englishLessonsSlice";
 import dayjs from "dayjs";
 import { collectionDb } from "../../locales/collectionDb";
 import ImageTitle from "../../components/ImageTitle/ImageTitle";
@@ -21,26 +20,24 @@ import image from "../../pictures/pageSchedule/job.jpg";
 import ModalDelete from "./ModalDelete/ModalDelete";
 import ModalEddLesson from "./ModalEddLesson/ModalEddLesson";
 import { lessonsPlaces } from "../../locales/localesJill";
+import PropTypes from "prop-types";
 
-const Schedule = () => {
+const Schedule = ({ pathNavigate, permissions }) => {
   const language = useSelector(selectLanguage);
-  const isLoading = useSelector(selectLessonsJillLoading);
+  const isLoading = useSelector(selectLessonsLoading);
+
   const screenMinWidth1100 = useMediaQuery("(min-width:1100px)");
   const screenMinWidth600 = useMediaQuery("(min-width:600px)");
 
   const dispatch = useDispatch();
 
-  const [isDay, setIsDay] = useState(null);
+  const [isDay, setIsDay] = useState(dayjs());
   const [valueTime, setValueTime] = useState("");
   const [valueSelect, setValueSelect] = useState(
     lessonsPlaces.defaultPlace.fullName
   );
   const [errorTime, setErrorTime] = useState(false);
-  const [selectMonth, setSelectMonth] = useState(
-    `${dayjs(new Date()).format("YYYY-MM")}`
-  );
-  console.log(selectMonth);
-  const [permission, setPermission] = useState(false);
+  const [selectMonthCalendar, setSelectMonthCalendar] = useState(dayjs());
   const [errorDate, setErrorDate] = useState(false);
   const [openModalPassword, setOpenModalPassword] = useState(false);
   const [valueDate, setValueDate] = useState("");
@@ -51,7 +48,7 @@ const Schedule = () => {
   const [selectError, setSelectError] = useState(false);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
 
-  // console.log(selectError);
+  // console.log(selectMonth);
   // console.log("TIME", valueTime);
   // console.log("isDay", isDay);
   // console.log(addingError);
@@ -62,33 +59,16 @@ const Schedule = () => {
   // console.log("SELECT", valueSelect);
 
   useEffect(() => {
-    dispatch(getScheduleThunk(collectionDb.lessonsWithJillSchedule));
-  }, [dispatch]);
-
-  useEffect(() => {
-    const actualPermission = () => {
-      if (permission) {
-        return;
-      }
-      if (sessionStorage.getItem("addLesson")) {
-        setPermission(true);
-      } else {
-        setPermission(false);
-      }
-    };
-
-    actualPermission();
-  }, [permission]);
+    dispatch(
+      getScheduleThunk({
+        nameCollection: collectionDb.lessonsWithJill,
+        selectMonthCalendar,
+      })
+    );
+  }, [dispatch, selectMonthCalendar]);
 
   const handleAddALesson = () => {
-    if (permission) {
-      return setOpen(true);
-    }
-    if (sessionStorage.getItem("addLesson")) {
-      setPermission(true);
-    } else {
-      setOpenModalPassword(true);
-    }
+    return setOpen(true);
   };
 
   const onSubmit = async (e) => {
@@ -105,7 +85,7 @@ const Schedule = () => {
     if (isEdit.edit) {
       dispatch(
         updateScheduleByIdThunk({
-          nameCollection: collectionDb.lessonsWithJillSchedule,
+          nameCollection: collectionDb.lessonsWithJill,
           id: isEdit?.data[isChooseALesson ?? 0]?.id,
           updateValue: {
             id: isEdit?.data[isChooseALesson ?? 0]?.id,
@@ -128,7 +108,7 @@ const Schedule = () => {
 
     dispatch(
       addScheduleThunk({
-        nameCollection: collectionDb.lessonsWithJillSchedule,
+        nameCollection: collectionDb.lessonsWithJill,
         data: {
           location: valueSelect,
           date: valueDate,
@@ -136,7 +116,7 @@ const Schedule = () => {
             dayjs(valueTime[0]).format("YYYY-MM-DDTHH:mm"),
             dayjs(valueTime[1]).format("YYYY-MM-DDTHH:mm"),
           ],
-          timestamp: dayjs(new Date()).format("YYYY-MM-DDTHH:mm:ss"),
+          createAt: dayjs(new Date()).format("YYYY-MM-DDTHH:mm:ss"),
         },
       })
     );
@@ -153,6 +133,7 @@ const Schedule = () => {
       <Box
         sx={{
           mb: 5,
+          width: "100%",
         }}
       >
         <ImageTitle
@@ -173,6 +154,9 @@ const Schedule = () => {
           justifyContent="center"
         >
           <Calendar
+            selectMonthCalendar={selectMonthCalendar}
+            setSelectMonthCalendar={setSelectMonthCalendar}
+            pathNavigate={pathNavigate}
             handleAddALesson={handleAddALesson}
             setIsDay={setIsDay}
             setIsEdit={setIsEdit}
@@ -182,7 +166,7 @@ const Schedule = () => {
             isChooseALesson={isChooseALesson}
             isDay={isDay}
             setValueSelect={setValueSelect}
-            permission={permission}
+            permissions={permissions}
             isDeleteModal={isDeleteModal}
             setIsDeleteModal={setIsDeleteModal}
           />
@@ -190,7 +174,7 @@ const Schedule = () => {
           <Paper
             elevation={screenMinWidth600 ? 1 : 0}
             sx={{
-              padding: screenMinWidth600 ? 5 : 0,
+              padding: screenMinWidth600 ? 5 : "30px 0 0 0",
               width: "100%",
               boxShadow: "0px 0px 3px -2px rgba(0,0,0,0.82)",
             }}
@@ -211,14 +195,15 @@ const Schedule = () => {
                 }}
               >
                 <SelectMonth
-                  selectMonth={selectMonth}
-                  setSelectMonth={setSelectMonth}
+                  selectMonthCalendar={selectMonthCalendar}
+                  setSelectMonthCalendar={setSelectMonthCalendar}
                 />
               </Paper>
 
               <BasicTable
-                selectMonth={selectMonth}
-                permission={permission}
+                pathNavigate={pathNavigate}
+                selectMonthCalendar={selectMonthCalendar}
+                permissions={permissions}
                 isDeleteModal={isDeleteModal}
                 setIsDeleteModal={setIsDeleteModal}
                 setIsEdit={setIsEdit}
@@ -275,3 +260,8 @@ const Schedule = () => {
 };
 
 export default Schedule;
+
+Schedule.propTypes = {
+  pathNavigate: PropTypes.string.isRequired,
+  permissions: PropTypes.bool.isRequired,
+};

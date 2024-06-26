@@ -22,11 +22,11 @@ import PropTypes from "prop-types";
 import { WrapperClose } from "./ModalCallendar.styled";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { selectLessonsJillLoading } from "../../../redux/englishLessonsSlice";
+import { selectLessonsLoading } from "../../../redux/englishLessonsSlice";
 import { useSelector } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
 import { lessonsPlaces } from "../../../locales/localesJill";
+
 export const ModalCalendar = ({
   isEdit,
   handleClose,
@@ -37,11 +37,12 @@ export const ModalCalendar = ({
   isDay,
   isChooseALesson,
   setValueSelect,
-  permission,
+  permissions,
   setIsDeleteModal,
+  pathNavigate,
 }) => {
   const [isFocuse, setIsFocus] = useState(false);
-  const isLoading = useSelector(selectLessonsJillLoading);
+  const isLoading = useSelector(selectLessonsLoading);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -126,21 +127,22 @@ export const ModalCalendar = ({
             )}
 
             <MenuList>
-              <MenuItem
-                disabled={isLoading}
-                onClick={() => {
-                  handleAddALesson();
-                }}
-              >
-                <ListItemText>
-                  {language === "en" ? "Add a lesson" : "Додати урок"}
-                </ListItemText>
-                <ListItemIcon sx={{ ml: 2 }}>
-                  <AddCircleIcon color="success" />
-                </ListItemIcon>
-              </MenuItem>
-
-              {isEdit.data?.length > 0 && permission && (
+              {permissions && (
+                <MenuItem
+                  disabled={isLoading}
+                  onClick={() => {
+                    handleAddALesson();
+                  }}
+                >
+                  <ListItemText>
+                    {language === "en" ? "Add a lesson" : "Додати урок"}
+                  </ListItemText>
+                  <ListItemIcon sx={{ ml: 2 }}>
+                    <AddCircleIcon color="success" />
+                  </ListItemIcon>
+                </MenuItem>
+              )}
+              {isEdit.data?.length > 0 && permissions && (
                 <Box>
                   <MenuItem
                     disabled={isLoading}
@@ -179,7 +181,7 @@ export const ModalCalendar = ({
                   disabled={isLoading}
                   onClick={() => {
                     navigate(
-                      `/schedule-of-lessons-with-jill/${
+                      `${pathNavigate}/${
                         isEdit?.data[isChooseALesson ?? 0]?.id
                       }`,
                       { state: isEdit?.data[isChooseALesson ?? 0]?.id }
@@ -217,7 +219,8 @@ ModalCalendar.propTypes = {
   ]),
   isDay: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf([null])]),
   setValueSelect: PropTypes.func,
-  permission: PropTypes.bool,
+  permissions: PropTypes.bool,
   isDeleteModal: PropTypes.bool,
   setIsDeleteModal: PropTypes.func,
+  pathNavigate: PropTypes.string.isRequired,
 };

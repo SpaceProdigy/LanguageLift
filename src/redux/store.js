@@ -11,11 +11,13 @@ import {
 
 import { localLessonsJillReducer } from "./localOperation";
 import { lessonsJillReducer } from "./englishLessonsSlice";
+import { authReducer } from "./authSlice";
 
 export const store = configureStore({
   reducer: {
-    lessonsJill: lessonsJillReducer,
+    lessons: lessonsJillReducer,
     local: localLessonsJillReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -14,9 +14,10 @@ import {
 import { motion } from "framer-motion";
 
 import { useLocation } from "react-router-dom";
-import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { selectLanguage } from "../../redux/localOperation";
+
+import PropTypes from "prop-types";
 
 export const Password = ({
   passwordKey,
