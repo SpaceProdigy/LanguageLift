@@ -52,7 +52,7 @@ export default function Comments({
         <CommentsBox>
           {[...comments]?.reverse()?.map(({ text, user, time, id }) => (
             <SmsBox key={id}>
-              {currentUser.uid !== user?.uid ? (
+              {currentUser?.uid !== user?.uid ? (
                 user?.photoURL ? (
                   <AvatareBox src={user?.photoURL} />
                 ) : (
@@ -66,7 +66,7 @@ export default function Comments({
               <TextBox elevation={2}>
                 <Typography
                   variant="caption"
-                  textAlign={currentUser.uid === user?.uid ? "right" : "left"}
+                  textAlign={currentUser?.uid === user?.uid ? "right" : "left"}
                   color={theme === "dark" ? "#008080" : "#2F4F4F"}
                 >
                   {user.displayName}
@@ -81,14 +81,14 @@ export default function Comments({
 
                 <Typography
                   variant="caption"
-                  textAlign={currentUser.uid === user?.uid ? "left" : "right"}
+                  textAlign={currentUser?.uid === user?.uid ? "left" : "right"}
                   color={theme === "dark" ? "#008000" : "#228B22"}
                 >
                   {time}
                 </Typography>
               </TextBox>
 
-              {currentUser.uid === user?.uid ? (
+              {currentUser?.uid === user?.uid ? (
                 user?.photoURL ? (
                   <Box>
                     <AvatareBox src={user?.photoURL} />
@@ -173,8 +173,7 @@ Comments.propTypes = {
   language: PropTypes.string.isRequired,
   comments: PropTypes.array,
   theme: PropTypes.string.isRequired,
-  currentUser: PropTypes.object.isRequired,
-
+  currentUser: PropTypes.object,
   authentificated: PropTypes.bool.isRequired,
   textComment: PropTypes.object.isRequired,
   setTextComment: PropTypes.func.isRequired,

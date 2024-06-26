@@ -20,7 +20,6 @@ export const CommentsBox = styled(Box)`
 
 export const SmsBox = styled(Box)`
   width: 100%;
-
   display: flex;
   justify-content: space-between;
   gap: 10px;

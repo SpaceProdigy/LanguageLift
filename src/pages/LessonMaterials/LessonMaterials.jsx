@@ -87,7 +87,6 @@ export default function LessonMaterials({
     );
   }, [dispatch, location.pathname, location?.state?.id, nameCollection]);
 
-  console.log(lessonMaterials);
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
       <AlertComponent />

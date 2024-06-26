@@ -28,7 +28,6 @@ export default function ImageModal({
   setOpenComment,
 }) {
   const currentInfo = isImages.find(({ name }) => name === isImagesModal.name);
-  console.log(openComment);
   return (
     <>
       <Modal
