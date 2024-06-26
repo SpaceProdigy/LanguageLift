@@ -1,0 +1,1 @@
+import{a as r,aP as o,u as a,j as e,a_ as n}from"./index-By5rtwD6.js";const u=()=>{const s=r(o),t=a("(max-width:480px)");return e.jsx("div",{children:e.jsx(n,{style:t&&{width:"90%",marginTop:20,marginLeft:20},position:"top-right",autoClose:5e3,hideProgressBar:!1,newestOnTop:!1,closeOnClick:!0,rtl:!1,pauseOnFocusLoss:!0,draggable:!0,pauseOnHover:!0,theme:s})})};export{u as A};
